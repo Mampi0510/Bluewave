@@ -1,0 +1,24 @@
+<Page x:Class="BlueWave.Views.Client"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid>
+        <TextBox Text="{Binding NomClient}" />
+
+        <TextBlock Text="Nom"
+               IsHitTestVisible="False"
+               Foreground="Gray"
+               Margin="5,0,0,0">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource PreviousData}}" Value="">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+    </Grid>
+</Page>

@@ -1,0 +1,17 @@
+F:\PROJECT\BlueWave\Bluewave.Data\bin\Debug\net10.0\Bluewave.Data.deps.json
+F:\PROJECT\BlueWave\Bluewave.Data\bin\Debug\net10.0\Bluewave.Data.runtimeconfig.json
+F:\PROJECT\BlueWave\Bluewave.Data\bin\Debug\net10.0\Bluewave.Data.dll
+F:\PROJECT\BlueWave\Bluewave.Data\bin\Debug\net10.0\Bluewave.Data.pdb
+F:\PROJECT\BlueWave\Bluewave.Data\bin\Debug\net10.0\BlueWave.Core.dll
+F:\PROJECT\BlueWave\Bluewave.Data\bin\Debug\net10.0\BlueWave.Core.pdb
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.csproj.AssemblyReference.cache
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.GeneratedMSBuildEditorConfig.editorconfig
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.AssemblyInfoInputs.cache
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.AssemblyInfo.cs
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.csproj.CoreCompileInputs.cache
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.E9A69175.Up2Date
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.dll
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\refint\Bluewave.Data.dll
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.pdb
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.genruntimeconfig.cache
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\ref\Bluewave.Data.dll

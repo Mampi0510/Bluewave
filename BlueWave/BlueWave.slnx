@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="BlueWave.Core/BlueWave.Core.csproj" Id="6479e685-56b9-4e52-8135-0b4653da1c35" />
+  <Project Path="Bluewave.Data/Bluewave.Data.csproj" Id="dab6d00c-c330-4cdc-b807-fc7b0cb80988" />
+  <Project Path="BlueWave.Shared/BlueWave.Shared.csproj" Id="7688faf2-6380-4e1d-99c4-12bcd08e0def" />
+  <Project Path="BlueWave/BlueWave.csproj" />
+</Solution>
