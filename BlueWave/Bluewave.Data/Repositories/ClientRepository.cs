@@ -12,17 +12,28 @@ namespace BlueWave.Data.Repositories{
             _context = context;
         }
 
-        public async Task<Client> GetClientByRef (int Ref){
+        public async Task<Client?> GetClientByRef (int Ref){
             return await _context.Client.FindAsync(Ref);
         }
-        public async Task<IEnumerable<Client>> GetAllClient() => await _context.Client.ToListAsync();
+        public async Task<IEnumerable<Client>> GetAllClient()
+        {
+            var clients = await _context.Client.ToListAsync();
 
+            // Remplacer les NULL par des valeurs par défaut
+            foreach (var c in clients)
+            {
+                c.Telephone = c.Telephone ?? "Non renseigné";
+                c.NomClient = c.NomClient ?? "Inconnu";
+                c.PrenomClient = c.PrenomClient ?? "Inconnu";
+            }
 
-        public async Task AddClient(Client client){
-            await _context.Client.AddAsync(client);
-            await _context.SaveChangesAsync(); 
+            return clients;
         }
-
+        public async Task AddClient(Client client)
+        {
+            _context.Client.Add(client);
+            await _context.SaveChangesAsync();
+        }
 
         public async Task UpdateClient(Client client){
             _context.Client.Update(client);

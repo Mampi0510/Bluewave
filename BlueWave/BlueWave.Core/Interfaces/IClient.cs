@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BlueWave.Core.Interfaces{
     public interface IClientRepository{
-        Task<Client> GetClientByRef (int Ref);
+        Task<Client?> GetClientByRef (int Ref);
 
         Task<IEnumerable<Client>> GetAllClient();
 

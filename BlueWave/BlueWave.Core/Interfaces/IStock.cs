@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BlueWave.Core.Interfaces{
     public interface IStockRepository{
-        Task<Stock> GetStockByNum (int NumStock);
+        Task<Stock?> GetStockByNum (int NumStock);
 
         Task<IEnumerable<Stock>> GetAllStock();
 

@@ -28,9 +28,9 @@
 
             <Button Content="Tableau de bord" Style="{StaticResource MenuButtonStyle}" Click="Dashboard_click"/>
             <Button Content="Commande" Style="{StaticResource MenuButtonStyle}" Click="Commande_click"/>
-            <Button Content="Produits" Style="{StaticResource MenuButtonStyle}" Click="Produit_click"/>
-            <Button Content="Clients" Style="{StaticResource MenuButtonStyle}" Click="Client_click"/>
-            <Button Content="Fournisseurs" Style="{StaticResource MenuButtonStyle}" Click="Fournisseur_click"/>
+            <Button Content="Produit" Style="{StaticResource MenuButtonStyle}" Click="Produit_click"/>
+            <Button Content="Client" Style="{StaticResource MenuButtonStyle}" Click="Client_click"/>
+            <Button Content="Fournisseur" Style="{StaticResource MenuButtonStyle}" Click="Fournisseur_click"/>
             <Button Content="Stock" Style="{StaticResource MenuButtonStyle}" Click="Stock_click"/>
             <Button Content="Export" Style="{StaticResource MenuButtonStyle}" Click="Export_click"/>
             <Button Content="Achat" Style="{StaticResource MenuButtonStyle}" Click="Achat_click"/>

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BlueWave.Core.Interfaces{
     public interface IProduitRepository{
-        Task<Produit> GetProduitByCode (int CodeProduit);
+        Task<Produit?> GetProduitByCode (int CodeProduit);
 
         Task<IEnumerable<Produit>> GetAllProduit();
 

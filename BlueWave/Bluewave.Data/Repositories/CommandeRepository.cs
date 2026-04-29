@@ -14,8 +14,10 @@ namespace BlueWave.Data.Repositories
         }
 
 
-        public async Task<Commande?> GetCommandeByNum(int num) {
-            return await _context.Commande.FindAsync(num); 
+        public async Task<Commande> GetCommandeByNum(int num) {
+            var commande = await _context.Commande.FindAsync(num);
+            if (commande == null) throw new InvalidOperationException($"Commande with NumeroCommande {num} not found.");
+            return commande; 
         }
 
         public async Task<IEnumerable<Commande>> GetAllCommande() => await _context.Commande.ToListAsync();

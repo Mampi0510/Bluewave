@@ -20,25 +20,28 @@ namespace BlueWave.ViewModels
         public DashboardViewModel(AppDbContext context)
         {
             _context = context;
-            LoadData();
         }
-
-        public async void LoadData()
+        public async Task LoadDataAsync()
         {
-            TotalCommandes = await _context.Commande.CountAsync();
-            TotalClients = await _context.Client.CountAsync();
-            TotalFournisseurs = await _context.Fournisseur.CountAsync();
-
-            ExportEnCours = await _context.Export.CountAsync(e => e.Statut == "En cours");
-
-            var data = await _context.Commande
-                .Include(c => c.Client)
-                .ToListAsync();
-
-            Commandes.Clear();
-            foreach (var item in data)
+            try
             {
-                Commandes.Add(item);
+                TotalCommandes = await _context.Commande.CountAsync();
+                TotalClients = await _context.Client.CountAsync();
+                TotalFournisseurs = await _context.Fournisseur.CountAsync();
+
+                ExportEnCours = await _context.Export.CountAsync(e => e.Statut == "En cours");
+
+                var data = await _context.Commande
+                    .Include(c => c.Client)
+                    .ToListAsync();
+
+                Commandes.Clear();
+                foreach (var item in data)
+                    Commandes.Add(item);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "Dashboard Load Error");
             }
         }
     }

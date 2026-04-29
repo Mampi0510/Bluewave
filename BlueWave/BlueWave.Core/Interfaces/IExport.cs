@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BlueWave.Core.Interfaces{
     public interface IExportRepository{
-        Task<Export> GetExportByNum (int Num);
+        Task<Export?> GetExportByNum (int Num);
 
         Task<IEnumerable<Export>> GetAllExport();
 

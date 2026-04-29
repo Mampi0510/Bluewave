@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BlueWave.Core.Interfaces{
     public interface IApprovisionnementRepository{
-        Task<Approvisionnement> GetApprovisionnementById(int IdApp);
+        Task<Approvisionnement?> GetApprovisionnementById(int IdApp);
 
         Task<IEnumerable<Approvisionnement>> GetAllApprovisionnement();
 

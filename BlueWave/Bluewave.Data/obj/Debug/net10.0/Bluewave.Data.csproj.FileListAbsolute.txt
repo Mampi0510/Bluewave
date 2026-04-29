@@ -9,6 +9,7 @@ F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.GeneratedMSBui
 F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.AssemblyInfoInputs.cache
 F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.AssemblyInfo.cs
 F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.csproj.CoreCompileInputs.cache
+F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.sourcelink.json
 F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.E9A69175.Up2Date
 F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\Bluewave.Data.dll
 F:\PROJECT\BlueWave\Bluewave.Data\obj\Debug\net10.0\refint\Bluewave.Data.dll

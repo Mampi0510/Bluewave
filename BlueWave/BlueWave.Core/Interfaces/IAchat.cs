@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace BlueWave.Core.Interfaces{
     public interface IAchatRepository{
-        Task<Achat> GetAchatById(int Id);
+        Task<Achat?> GetAchatById(int Id);
 
         Task<IEnumerable<Achat>> GetAllAchat();
 

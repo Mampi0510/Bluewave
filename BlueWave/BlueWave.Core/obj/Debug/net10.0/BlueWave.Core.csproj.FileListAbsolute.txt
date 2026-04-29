@@ -5,6 +5,7 @@ F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\BlueWave.Core.GeneratedMSBui
 F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\BlueWave.Core.AssemblyInfoInputs.cache
 F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\BlueWave.Core.AssemblyInfo.cs
 F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\BlueWave.Core.csproj.CoreCompileInputs.cache
+F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\BlueWave.Core.sourcelink.json
 F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\BlueWave.Core.dll
 F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\refint\BlueWave.Core.dll
 F:\PROJECT\BlueWave\BlueWave.Core\obj\Debug\net10.0\BlueWave.Core.pdb

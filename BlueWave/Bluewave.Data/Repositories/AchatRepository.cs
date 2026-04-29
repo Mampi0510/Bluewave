@@ -13,7 +13,7 @@ namespace BlueWave.Data.Repositories{
         }
 
         //Les methodes d'achat
-        public async Task<Achat> GetAchatById(int Id) => await _context.Achat.FindAsync(Id);
+        public async Task<Achat?> GetAchatById(int Id) => await _context.Achat.FindAsync(Id);
 
         public async Task<IEnumerable<Achat>> GetAllAchat() => await _context.Achat.ToListAsync();
 
