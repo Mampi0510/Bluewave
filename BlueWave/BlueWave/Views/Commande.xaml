@@ -1,95 +1,142 @@
 <Page x:Class="BlueWave.Views.Commande"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      KeepAlive="True">
 
-	<Grid Margin="20">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-		<!-- FORMULAIRE -->
-		<Border Padding="15" Margin="0,0,0,15" Background="#FFF" CornerRadius="8">
-			<StackPanel>
+        <!-- FORMULAIRE -->
+        <Border Padding="15" Margin="0,0,0,15" Background="#FFF" CornerRadius="8">
+            <StackPanel>
 
-				<TextBlock Text="Gestion des Commandes"
+                <TextBlock Text="Gestion des Commandes"
                            FontSize="20"
                            FontWeight="Bold"
                            Margin="0,0,0,10"/>
 
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="2*"/>
-						<ColumnDefinition Width="2*"/>
-						<ColumnDefinition Width="Auto"/>
-					</Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-					<!-- CLIENT -->
-					<ComboBox Grid.Column="0"
+                    <!-- CLIENT -->
+                    <ComboBox Grid.Column="0"
                               Margin="5"
                               Height="35"
                               ItemsSource="{Binding Clients}"
                               DisplayMemberPath="NomClient"
-                              SelectedItem="{Binding SelectedClient}" />
+                              SelectedItem="{Binding SelectedClient}"/>
 
-					<!-- DESTINATION -->
-					<TextBox Grid.Column="1"
-                             Margin="5"
-                             Height="35"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding Destination}" />
+                    <!-- EXPORT -->
+                    <ComboBox Grid.Column="1"
+                              Margin="5"
+                              Height="35"
+                              ItemsSource="{Binding Exports}"
+                              DisplayMemberPath="NumeroExport"
+                              SelectedItem="{Binding SelectedExport}"/>
 
-					<!-- BOUTONS -->
-					<StackPanel Grid.Column="2" Orientation="Horizontal">
-						<Button Content="Ajouter"
+                    <!-- DESTINATION -->
+                    <Grid Grid.Column="2" Margin="5">
+                        <TextBox Height="35"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Destination"
+                                   IsHitTestVisible="False"
+                                   VerticalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Foreground="Gray">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Destination}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Destination}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+
+                    <!-- BOUTONS -->
+                    <StackPanel Grid.Column="3" Orientation="Horizontal">
+                        <Button Content="Ajouter"
                                 Margin="5"
                                 Padding="15,5"
-                                Command="{Binding AddCommand}" />
-					</StackPanel>
+                                Command="{Binding AddCommand}"/>
+                        <Button Content="Supprimer"
+                                Margin="5"
+                                Padding="15,5"
+                                Command="{Binding DeleteCommand}"/>
+                    </StackPanel>
 
-				</Grid>
+                </Grid>
 
-			</StackPanel>
-		</Border>
+                <TextBlock Text="{Binding MErrorMessage}"
+           Foreground="Red"
+           Margin="5,5,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Border>
 
-		<!-- TABLE -->
-		<DataGrid Grid.Row="1"
+        <!-- TABLE -->
+        <DataGrid Grid.Row="1"
                   ItemsSource="{Binding Commandes}"
-                  AutoGenerateColumns="False">
+                  SelectedItem="{Binding SelectedCommande}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
 
-			<DataGrid.Columns>
-				<DataGridTextColumn Header="N°"
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="N°"
                                     Binding="{Binding NumeroCommande}"
                                     Width="80"/>
-
-				<DataGridTextColumn Header="Client"
+                <DataGridTextColumn Header="Client"
                                     Binding="{Binding Client.NomClient}"
                                     Width="*"/>
-
-				<DataGridTextColumn Header="Destination"
+                <DataGridTextColumn Header="Destination"
                                     Binding="{Binding Destination}"
                                     Width="*"/>
-
-				<DataGridTextColumn Header="Date"
-                                    Binding="{Binding DateCommande}"
+                <DataGridTextColumn Header="Date"
+                                    Binding="{Binding DateCommande, StringFormat=dd/MM/yyyy}"
                                     Width="*"/>
 
-				<!-- DELETE BUTTON -->
-				<DataGridTemplateColumn Header="Action">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<Button Content="Supprimer"
+                <DataGridTemplateColumn Header="Action">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Supprimer"
                                     Command="{Binding DataContext.DeleteCommand,
                                               RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}"
                                     Padding="10,3"/>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
 
-			</DataGrid.Columns>
+        </DataGrid>
 
-		</DataGrid>
-
-	</Grid>
+    </Grid>
 </Page>

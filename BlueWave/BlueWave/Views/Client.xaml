@@ -1,6 +1,7 @@
 <Page x:Class="BlueWave.Views.Client"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      KeepAlive="True">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -25,37 +26,112 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0"
-                             Margin="5"
-                             Height="35"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding NomClient, UpdateSourceTrigger=PropertyChanged}" />
+                    <!-- Nom -->
+                    <Grid Grid.Column="0" Margin="5">
+                        <TextBox Height="35"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding NomClient, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Nom"
+                                   IsHitTestVisible="False"
+                                   VerticalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Foreground="Gray">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding NomClient}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding NomClient}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
 
-                    <TextBox Grid.Column="1"
-                             Margin="5"
-                             Height="35"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding PrenomClient}" />
+                    <!-- Prénom -->
+                    <Grid Grid.Column="1" Margin="5">
+                        <TextBox Height="35"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding PrenomClient, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Prénom"
+                                   IsHitTestVisible="False"
+                                   VerticalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Foreground="Gray">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding PrenomClient}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding PrenomClient}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
 
-                    <TextBox Grid.Column="2"
-                             Margin="5"
-                             Height="35"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding Telephone}" />
+                    <!-- Téléphone -->
+                    <Grid Grid.Column="2" Margin="5">
+                        <TextBox Height="35"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding Telephone, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Téléphone"
+                                   IsHitTestVisible="False"
+                                   VerticalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Foreground="Gray">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Telephone}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Telephone}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
 
+                    <!-- Boutons -->
                     <StackPanel Grid.Column="3" Orientation="Horizontal">
                         <Button Content="Ajouter"
                                 Margin="5"
                                 Padding="15,5"
                                 Command="{Binding AddCommand}"/>
-
-                        <Button Content="Supprimer"
-                                Margin="5"
-                                Padding="15,5"
-                                Command="{Binding DeleteCommand}"/>
                     </StackPanel>
+
                 </Grid>
 
+                <!-- Message erreur -->
+                <TextBlock Text="{Binding MErrorMessage}"
+                           Foreground="Red"
+                           Margin="5,5,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
             </StackPanel>
         </Border>
 
@@ -67,10 +143,23 @@
                   IsReadOnly="True">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" Binding="{Binding RefClient}" Width="80"/>
-                <DataGridTextColumn Header="Nom" Binding="{Binding NomClient}" Width="*"/>
-                <DataGridTextColumn Header="Prénom" Binding="{Binding PrenomClient}" Width="*"/>
-                <DataGridTextColumn Header="Téléphone" Binding="{Binding Telephone}" Width="*"/>
+                <DataGridTextColumn Header="ID"        Binding="{Binding RefClient}"    Width="80"/>
+                <DataGridTextColumn Header="Nom"       Binding="{Binding NomClient}"    Width="*"/>
+                <DataGridTextColumn Header="Prénom"    Binding="{Binding PrenomClient}" Width="*"/>
+                <DataGridTextColumn Header="Téléphone" Binding="{Binding Telephone}"    Width="*"/>
+
+                <!-- DELETE BUTTON -->
+                <DataGridTemplateColumn Header="Action">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Supprimer"
+                                    Command="{Binding DataContext.DeleteCommand,
+                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}"
+                                    Padding="10,3"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
 
         </DataGrid>

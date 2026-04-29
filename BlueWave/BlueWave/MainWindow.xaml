@@ -7,39 +7,30 @@
         Background="#F5F7FA" Icon="/icon.png">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0*"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8"/>
-            <ColumnDefinition Width="7.9"/>
-            <ColumnDefinition Width="234.1"/>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition Width="92*"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Background="#FF194C81" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2">
+        <StackPanel Background="#FF194C81" Grid.Column="0">
             <TextBlock Text="BlueWave"
                        Foreground="White"
                        FontSize="28"
                        Margin="20"
-                       FontWeight="Bold" HorizontalAlignment="Center"/>
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
 
             <Button Content="Tableau de bord" Style="{StaticResource MenuButtonStyle}" Click="Dashboard_click"/>
-            <Button Content="Commande" Style="{StaticResource MenuButtonStyle}" Click="Commande_click"/>
-            <Button Content="Produit" Style="{StaticResource MenuButtonStyle}" Click="Produit_click"/>
             <Button Content="Client" Style="{StaticResource MenuButtonStyle}" Click="Client_click"/>
             <Button Content="Fournisseur" Style="{StaticResource MenuButtonStyle}" Click="Fournisseur_click"/>
             <Button Content="Stock" Style="{StaticResource MenuButtonStyle}" Click="Stock_click"/>
+            <Button Content="Produit" Style="{StaticResource MenuButtonStyle}" Click="Produit_click"/>
+            <Button Content="Commande" Style="{StaticResource MenuButtonStyle}" Click="Commande_click"/>
             <Button Content="Export" Style="{StaticResource MenuButtonStyle}" Click="Export_click"/>
-            <Button Content="Achat" Style="{StaticResource MenuButtonStyle}" Click="Achat_click"/>
-            <Button Content="Approvisionnement" Style="{StaticResource MenuButtonStyle}" Click="Approvisionnement_click"/>
         </StackPanel>
 
-        <Frame x:Name="MainFrame"
-                 Grid.Column="3"
-                 Grid.ColumnSpan="2"
-                 Grid.RowSpan="2"/>
+        <Frame x:Name="MainFrame" 
+               Grid.Column="1"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

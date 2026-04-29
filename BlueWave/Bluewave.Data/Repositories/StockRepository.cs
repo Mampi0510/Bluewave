@@ -13,8 +13,8 @@ namespace BlueWave.Data.Repositories{
 
         public async Task<Stock?> GetStockByNum(int numStock) => await _context.Stock.FindAsync(numStock);
 
-        public async Task<IEnumerable<Stock>> GetAllStock() => await _context.Stock.ToListAsync();
-
+        public async Task<IEnumerable<Stock>> GetAllStock() =>
+            await _context.Stock.ToListAsync();
         public async Task AddStock(Stock stock){
             await _context.Stock.AddAsync(stock);
             await _context.SaveChangesAsync();

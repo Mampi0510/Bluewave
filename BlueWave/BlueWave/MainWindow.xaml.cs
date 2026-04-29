@@ -43,19 +43,11 @@ namespace BlueWave
         {
             MainFrame.Navigate(new Produit());
         }
-       private void Achat_click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new Achat());
-        }
-       private void Approvisionnement_click(object sender, RoutedEventArgs e)
-        {
-            MainFrame.Navigate(new Approvisionnement());
-        }
        private void Stock_click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new Stock());
         }
-       private void Export_click(object sender, RoutedEventArgs e)
+        private void Export_click(object sender, RoutedEventArgs e)
         {
             MainFrame.Navigate(new Export());
         }

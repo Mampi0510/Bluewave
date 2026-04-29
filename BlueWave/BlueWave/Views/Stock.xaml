@@ -2,11 +2,112 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Grid>
-        <TextBlock Text="Page Stock"
-                   FontSize="30"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-    </Grid>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <!-- FORMULAIRE -->
+        <Border Padding="15" Margin="0,0,0,15" Background="#FFF" CornerRadius="8">
+            <StackPanel>
+
+                <TextBlock Text="Gestion des Stocks"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Type -->
+                    <Grid Grid.Column="0" Margin="5">
+                        <TextBox Height="35"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Type de produit"
+                                   IsHitTestVisible="False"
+                                   VerticalAlignment="Center"
+                                   Margin="5,0,0,0"
+                                   Foreground="Gray">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+
+                    <!-- Boutons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Content="Ajouter"
+                                Margin="5"
+                                Padding="15,5"
+                                Command="{Binding AddCommand}"/>
+                    </StackPanel>
+
+                </Grid>
+
+                <!-- Message erreur -->
+                <TextBlock Text="{Binding MErrorMessage}"
+                           Foreground="Red"
+                           Margin="5,5,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+            </StackPanel>
+        </Border>
+
+        <!-- TABLE -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Stocks}"
+                  SelectedItem="{Binding SelectedStock}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID"       Binding="{Binding NumeroStock}" Width="60"/>
+                <DataGridTextColumn Header="Type"     Binding="{Binding Type}"        Width="*"/>
+                <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}"    Width="100"/>
+
+                <!-- DELETE -->
+                <DataGridTemplateColumn Header="Action">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Supprimer"
+                                    Command="{Binding DataContext.DeleteCommand,
+                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}"
+                                    Padding="10,3"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
 </Page>

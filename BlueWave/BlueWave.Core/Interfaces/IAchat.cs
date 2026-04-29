@@ -9,6 +9,7 @@ namespace BlueWave.Core.Interfaces{
         Task<IEnumerable<Achat>> GetAllAchat();
 
         Task<IEnumerable<Achat>> GetAchatByNumeroCommande(int numCommande);
+        Task AddAchat(Achat achat);
 
         Task UpdateAchat(Achat achat);
 

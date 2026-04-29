@@ -1,6 +1,7 @@
 <Page x:Class="BlueWave.Views.Approvisionnement"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  KeepAlive="True">
 
     <Grid>
         <TextBlock Text="Page Approvisionnement"

@@ -1,6 +1,7 @@
 <Page x:Class="BlueWave.Views.Fournisseur"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      KeepAlive="True">
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -108,14 +109,8 @@
                                 Margin="5"
                                 Padding="15,5"
                                 Command="{Binding AddCommand}"/>
-
-                        <Button Content="Supprimer"
-                                Margin="5"
-                                Padding="15,5"
-                                Command="{Binding DeleteCommand}"/>
                     </StackPanel>
                 </Grid>
-
             </StackPanel>
         </Border>
 
@@ -131,6 +126,18 @@
                 <DataGridTextColumn Header="Nom" Binding="{Binding NomFournisseur}" Width="*"/>
                 <DataGridTextColumn Header="Prénom" Binding="{Binding PrenomsFournisseur}" Width="*"/>
                 <DataGridTextColumn Header="Téléphone" Binding="{Binding TelephoneFournisseur}" Width="*"/>
+                <!-- DELETE BUTTON -->
+                <DataGridTemplateColumn Header="Action">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Supprimer"
+                     Command="{Binding DataContext.DeleteCommand,
+                               RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                     CommandParameter="{Binding}"
+                     Padding="10,3"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
 
         </DataGrid>

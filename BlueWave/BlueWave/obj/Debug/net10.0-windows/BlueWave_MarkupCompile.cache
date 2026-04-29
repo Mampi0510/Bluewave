@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 F:\PROJECT\BlueWave\BlueWave\App.xaml
-10-795093641
+11649701324
 
-2433291321
+26275444402
 223-2044835131
-MainWindow.xaml;Views\Achat.xaml;Views\Approvisionnement.xaml;Views\Client.xaml;Views\Commande.xaml;Views\Dashboard.xaml;Views\Export.xaml;Views\Fournisseur.xaml;Views\Produit.xaml;Views\Stock.xaml;
+MainWindow.xaml;Views\Achat.xaml;Views\Approvisionnement.xaml;Views\Client.xaml;Views\Commande.xaml;Views\CommandeHub.xaml;Views\Dashboard.xaml;Views\Export.xaml;Views\Fournisseur.xaml;Views\Produit.xaml;Views\Stock.xaml;
 
 False
 

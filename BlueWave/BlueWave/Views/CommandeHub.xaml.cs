@@ -4,15 +4,15 @@ using System.Windows.Controls;
 
 namespace BlueWave.Views
 {
-    public partial class Stock : Page
+    public partial class CommandeHub : Page
     {
-        private readonly StockViewModel _vm;
+        private readonly CommandeHubViewModel _vm;
 
-        public Stock()
+        public CommandeHub()
         {
             InitializeComponent();
 
-            _vm = App.ServiceProvider.GetRequiredService<StockViewModel>();
+            _vm = App.ServiceProvider.GetRequiredService<CommandeHubViewModel>();
             DataContext = _vm;
 
             Loaded += async (_, _) => await _vm.LoadDataAsync();

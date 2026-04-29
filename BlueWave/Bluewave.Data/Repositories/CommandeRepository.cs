@@ -20,14 +20,17 @@ namespace BlueWave.Data.Repositories
             return commande; 
         }
 
-        public async Task<IEnumerable<Commande>> GetAllCommande() => await _context.Commande.ToListAsync();
-
+        public async Task<IEnumerable<Commande>> GetAllCommande() =>
+            await _context.Commande
+                .Include(c => c.Client)
+                .Include(c => c.Export)
+                .ToListAsync();
         public async Task<IEnumerable<Commande>> GetCommandeByRefClient(int refClient) => await _context.Commande
                 .Where(c => c.RefClient == refClient)
                 .ToListAsync();
 
         public async Task<IEnumerable<Commande>> GetCommandeByCodeExport(int codeExport) => await _context.Commande
-                .Where(c => c.CodeExport == codeExport)
+                .Where(c => c.NumeroExport == codeExport)
                 .ToListAsync();
 
         public async Task AddCommande(Commande commande){

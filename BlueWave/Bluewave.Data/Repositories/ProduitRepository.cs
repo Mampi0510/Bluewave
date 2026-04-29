@@ -19,8 +19,17 @@ namespace BlueWave.Data.Repositories{
                 .Where(p => p.NumeroStock == numStock)
                 .ToListAsync();
 
-        public async Task AddProduit(Produit produit){
+        public async Task AddProduit(Produit produit)
+        {
             await _context.Produit.AddAsync(produit);
+            var stock = await _context.Stock.FindAsync(produit.NumeroStock);
+
+            if (stock != null)
+            {
+                stock.Quantite += produit.Quantite;
+                _context.Stock.Update(stock);
+            }
+
             await _context.SaveChangesAsync();
         }
 
