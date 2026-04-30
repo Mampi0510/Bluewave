@@ -48,8 +48,8 @@ namespace BlueWave
                 services.AddTransient<CommandeViewModel>();
                 services.AddTransient<FournisseurViewModel>();
                 services.AddTransient<ProduitViewModel>();
-                services.AddTransient<CommandeHubViewModel>();
                 services.AddTransient<ExportViewModel>();
+                services.AddTransient<ApprovisionnementViewModel>();
 
 
                 ServiceProvider = services.BuildServiceProvider();

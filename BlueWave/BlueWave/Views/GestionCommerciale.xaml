@@ -1,0 +1,246 @@
+<Page x:Class="BlueWave.Views.GestionCommerciale"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      KeepAlive="True">
+
+	<Grid Margin="30,25">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<StackPanel Margin="0,0,0,20">
+			<TextBlock Text="Gestion Commerciale" FontSize="24"
+                       FontWeight="Bold" Foreground="#0D2137"/>
+			<TextBlock Text="Suivi des flux d'approvisionnement et export"
+                       Foreground="#607D8B" FontSize="13" Margin="0,4,0,0"/>
+		</StackPanel>
+
+		<TabControl Grid.Row="1" BorderThickness="0" Background="Transparent">
+			<TabControl.Resources>
+				<Style TargetType="TabItem">
+					<Setter Property="Padding" Value="20,10"/>
+					<Setter Property="FontSize" Value="13"/>
+				</Style>
+			</TabControl.Resources>
+
+			<!-- APPROVISIONNEMENT -->
+			<TabItem Header="Approvisionnement">
+				<Grid Margin="0,15,0,0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+
+					<Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+						<StackPanel>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition/>
+									<ColumnDefinition/>
+									<ColumnDefinition/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+
+								<Grid Grid.Column="0" Margin="5">
+									<TextBox Height="35" VerticalContentAlignment="Center"
+                                             Text="{Binding ApproVm.Certificat, UpdateSourceTrigger=PropertyChanged}"/>
+									<TextBlock Text="Certificat" IsHitTestVisible="False"
+                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+										<TextBlock.Style>
+											<Style TargetType="TextBlock">
+												<Setter Property="Visibility" Value="Collapsed"/>
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding ApproVm.Certificat}" Value="">
+														<Setter Property="Visibility" Value="Visible"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding ApproVm.Certificat}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Visible"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+								</Grid>
+
+								<ComboBox Grid.Column="1" Margin="5" Height="35"
+                                          ItemsSource="{Binding ApproVm.Fournisseurs}"
+                                          DisplayMemberPath="NomFournisseur"
+                                          SelectedItem="{Binding ApproVm.SelectedFournisseur}"/>
+
+								<ComboBox Grid.Column="2" Margin="5" Height="35"
+                                          ItemsSource="{Binding ApproVm.Produits}"
+                                          DisplayMemberPath="NomProduit"
+                                          SelectedItem="{Binding ApproVm.SelectedProduit}"/>
+
+								<Button Grid.Column="3" Content="+ Ajouter" Margin="5"
+                                        Style="{StaticResource ActionButtonStyle}"
+                                        Command="{Binding ApproVm.AddCommand}"/>
+							</Grid>
+							<TextBlock Text="{Binding ApproVm.MErrorMessage}"
+                                       Foreground="Red" Margin="5,5,0,0">
+								<TextBlock.Style>
+									<Style TargetType="TextBlock">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding ApproVm.MErrorMessage}" Value="{x:Null}">
+												<Setter Property="Visibility" Value="Collapsed"/>
+											</DataTrigger>
+											<DataTrigger Binding="{Binding ApproVm.MErrorMessage}" Value="">
+												<Setter Property="Visibility" Value="Collapsed"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+						</StackPanel>
+					</Border>
+
+					<DataGrid Grid.Row="1"
+                              Style="{StaticResource StyledDataGrid}"
+                              ItemsSource="{Binding ApproVm.Approvisionnements}"
+                              SelectedItem="{Binding ApproVm.SelectedApprovisionnement}">
+						<DataGrid.ColumnHeaderStyle>
+							<Style TargetType="DataGridColumnHeader"
+                                   BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
+						</DataGrid.ColumnHeaderStyle>
+						<DataGrid.CellStyle>
+							<Style TargetType="DataGridCell"
+                                   BasedOn="{StaticResource StyledDataGridCell}"/>
+						</DataGrid.CellStyle>
+						<DataGrid.RowStyle>
+							<Style TargetType="DataGridRow"
+                                   BasedOn="{StaticResource StyledDataGridRow}"/>
+						</DataGrid.RowStyle>
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="ID" Binding="{Binding IdApp}" Width="60"/>
+							<DataGridTextColumn Header="Certificat" Binding="{Binding Certificat}" Width="*"/>
+							<DataGridTextColumn Header="Fournisseur" Binding="{Binding Fournisseur.NomFournisseur}" Width="*"/>
+							<DataGridTextColumn Header="Produit" Binding="{Binding Produit.NomProduit}" Width="*"/>
+							<DataGridTemplateColumn Header="Action" Width="120">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Button Content="Supprimer"
+                                                Style="{StaticResource DangerButtonStyle}"
+                                                Command="{Binding DataContext.ApproVm.DeleteCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"/>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+				</Grid>
+			</TabItem>
+
+			<!-- COMMANDES -->
+			<TabItem Header="Commandes Export">
+				<Grid Margin="0,15,0,0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+
+					<Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+						<StackPanel>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition/>
+									<ColumnDefinition/>
+									<ColumnDefinition/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+
+								<ComboBox Grid.Column="0" Margin="5" Height="35"
+                                          ItemsSource="{Binding CommandeVm.Clients}"
+                                          DisplayMemberPath="NomClient"
+                                          SelectedItem="{Binding CommandeVm.SelectedClient}"/>
+
+								<ComboBox Grid.Column="1" Margin="5" Height="35"
+                                          ItemsSource="{Binding CommandeVm.Exports}"
+                                          DisplayMemberPath="NumeroExport"
+                                          SelectedItem="{Binding CommandeVm.SelectedExport}"/>
+
+								<Grid Grid.Column="2" Margin="5">
+									<TextBox Height="35" VerticalContentAlignment="Center"
+                                             Text="{Binding CommandeVm.Destination, UpdateSourceTrigger=PropertyChanged}"/>
+									<TextBlock Text="Destination" IsHitTestVisible="False"
+                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+										<TextBlock.Style>
+											<Style TargetType="TextBlock">
+												<Setter Property="Visibility" Value="Collapsed"/>
+												<Style.Triggers>
+													<DataTrigger Binding="{Binding CommandeVm.Destination}" Value="">
+														<Setter Property="Visibility" Value="Visible"/>
+													</DataTrigger>
+													<DataTrigger Binding="{Binding CommandeVm.Destination}" Value="{x:Null}">
+														<Setter Property="Visibility" Value="Visible"/>
+													</DataTrigger>
+												</Style.Triggers>
+											</Style>
+										</TextBlock.Style>
+									</TextBlock>
+								</Grid>
+
+								<Button Grid.Column="3" Content="+ Ajouter" Margin="5"
+                                        Style="{StaticResource ActionButtonStyle}"
+                                        Command="{Binding CommandeVm.AddCommand}"/>
+							</Grid>
+							<TextBlock Text="{Binding CommandeVm.MErrorMessage}"
+                                       Foreground="Red" Margin="5,5,0,0">
+								<TextBlock.Style>
+									<Style TargetType="TextBlock">
+										<Setter Property="Visibility" Value="Collapsed"/>
+										<Style.Triggers>
+											<DataTrigger Binding="{Binding CommandeVm.MErrorMessage}" Value="{x:Null}">
+												<Setter Property="Visibility" Value="Collapsed"/>
+											</DataTrigger>
+											<DataTrigger Binding="{Binding CommandeVm.MErrorMessage}" Value="">
+												<Setter Property="Visibility" Value="Collapsed"/>
+											</DataTrigger>
+										</Style.Triggers>
+									</Style>
+								</TextBlock.Style>
+							</TextBlock>
+						</StackPanel>
+					</Border>
+
+					<DataGrid Grid.Row="1"
+                              Style="{StaticResource StyledDataGrid}"
+                              ItemsSource="{Binding CommandeVm.Commandes}"
+                              SelectedItem="{Binding CommandeVm.SelectedCommande}">
+						<DataGrid.ColumnHeaderStyle>
+							<Style TargetType="DataGridColumnHeader"
+                                   BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
+						</DataGrid.ColumnHeaderStyle>
+						<DataGrid.CellStyle>
+							<Style TargetType="DataGridCell"
+                                   BasedOn="{StaticResource StyledDataGridCell}"/>
+						</DataGrid.CellStyle>
+						<DataGrid.RowStyle>
+							<Style TargetType="DataGridRow"
+                                   BasedOn="{StaticResource StyledDataGridRow}"/>
+						</DataGrid.RowStyle>
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="N°" Binding="{Binding NumeroCommande}" Width="60"/>
+							<DataGridTextColumn Header="Client" Binding="{Binding Client.NomClient}" Width="*"/>
+							<DataGridTextColumn Header="Destination" Binding="{Binding Destination}" Width="*"/>
+							<DataGridTextColumn Header="Date" Binding="{Binding DateCommande, StringFormat=dd/MM/yyyy}" Width="*"/>
+							<DataGridTemplateColumn Header="Action" Width="120">
+								<DataGridTemplateColumn.CellTemplate>
+									<DataTemplate>
+										<Button Content="Supprimer"
+                                                Style="{StaticResource DangerButtonStyle}"
+                                                Command="{Binding DataContext.CommandeVm.DeleteCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"/>
+									</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+							</DataGridTemplateColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</Page>
