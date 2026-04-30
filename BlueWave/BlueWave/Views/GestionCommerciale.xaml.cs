@@ -8,6 +8,7 @@ namespace BlueWave.Views
     {
         public ApprovisionnementViewModel ApproVm { get; }
         public CommandeViewModel CommandeVm { get; }
+        public ExportViewModel ExportVm { get; }
 
         public GestionCommerciale()
         {
@@ -15,6 +16,7 @@ namespace BlueWave.Views
 
             ApproVm = App.ServiceProvider.GetRequiredService<ApprovisionnementViewModel>();
             CommandeVm = App.ServiceProvider.GetRequiredService<CommandeViewModel>();
+            ExportVm = App.ServiceProvider.GetRequiredService<ExportViewModel>();
 
             DataContext = this;
 
@@ -22,6 +24,7 @@ namespace BlueWave.Views
             {
                 await ApproVm.LoadDataAsync();
                 await CommandeVm.LoadDataAsync();
+                await ExportVm.LoadDataAsync();
             };
         }
     }

@@ -10,17 +10,20 @@ namespace BlueWave.ViewModels
     {
         private readonly AppDbContext _context;
 
-        public ObservableCollection<Commande> Commandes { get; set; } = new();
+        public ObservableCollection<Commande> Commandes { get; } = new();
 
-        [ObservableProperty] private int totalCommandes;
-        [ObservableProperty] private int totalClients;
-        [ObservableProperty] private int totalFournisseurs;
-        [ObservableProperty] private int exportEnCours;
+        [ObservableProperty] private int _totalCommandes;
+        [ObservableProperty] private int _totalClients;
+        [ObservableProperty] private int _totalFournisseurs;
+        [ObservableProperty] private int _exportEnCours;
+        [ObservableProperty] private int _totalProduits;
+        [ObservableProperty] private int _totalStocks;
 
         public DashboardViewModel(AppDbContext context)
         {
             _context = context;
         }
+
         public async Task LoadDataAsync()
         {
             try
@@ -28,20 +31,24 @@ namespace BlueWave.ViewModels
                 TotalCommandes = await _context.Commande.CountAsync();
                 TotalClients = await _context.Client.CountAsync();
                 TotalFournisseurs = await _context.Fournisseur.CountAsync();
+                TotalProduits = await _context.Produit.CountAsync();
+                TotalStocks = await _context.Stock.CountAsync();
+                ExportEnCours = await _context.Export
+                                        .CountAsync(e => e.Statut == "En cours");
 
-                ExportEnCours = await _context.Export.CountAsync(e => e.Statut == "En cours");
-
-                var data = await _context.Commande
+                var commandes = await _context.Commande
                     .Include(c => c.Client)
+                    .Include(c => c.Export)
+                    .OrderByDescending(c => c.DateCommande)
+                    .Take(20)
                     .ToListAsync();
 
                 Commandes.Clear();
-                foreach (var item in data)
-                    Commandes.Add(item);
+                foreach (var c in commandes) Commandes.Add(c);
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.Message, "Dashboard Load Error");
+                System.Windows.MessageBox.Show(ex.Message, "Dashboard Error");
             }
         }
     }

@@ -55,9 +55,6 @@
                             <Button Content="+ Ajouter" Margin="5"
                                     Style="{StaticResource ActionButtonStyle}"
                                     Command="{Binding AddCommand}"/>
-                            <Button Content="Supprimer" Margin="5"
-                                    Style="{StaticResource DangerButtonStyle}"
-                                    Command="{Binding DeleteCommand}"/>
                         </StackPanel>
                     </Grid>
 

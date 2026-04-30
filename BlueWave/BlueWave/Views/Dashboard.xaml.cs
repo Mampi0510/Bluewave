@@ -1,16 +1,19 @@
-using BlueWave.Data.Context;
 using BlueWave.ViewModels;
-using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows.Controls;
 
 namespace BlueWave.Views
 {
     public partial class Dashboard : Page
     {
+        private readonly DashboardViewModel _vm;
+
         public Dashboard()
         {
             InitializeComponent();
-            DataContext = App.ServiceProvider.GetService<DashboardViewModel>();
+            _vm = App.ServiceProvider.GetRequiredService<DashboardViewModel>();
+            DataContext = _vm;
+            Loaded += async (_, _) => await _vm.LoadDataAsync();
         }
     }
 }

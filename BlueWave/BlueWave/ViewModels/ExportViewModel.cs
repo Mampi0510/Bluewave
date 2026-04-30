@@ -67,7 +67,7 @@ namespace BlueWave.ViewModels
         }
         public List<string> Statuts { get; } = new()
         {
-           "En cours", "Expédié", "Livré", "Annulé"
+           "En cours", "Expédié"
         };
     }
 }

@@ -3,66 +3,126 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       KeepAlive="True">
 
-<Grid Grid.Column="3" Margin="20,20,20,20" Grid.ColumnSpan="2" Grid.RowSpan="2">
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
+    <Grid Margin="30,25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <StackPanel>
-        <TextBlock Text="Tableau de bord" FontSize="24" FontWeight="Bold"/>
-    </StackPanel>
-    <UniformGrid Grid.Row="1" Columns="4" Margin="0,20,0,20">
+        <!-- HEADER -->
+        <StackPanel Margin="0,0,0,20">
+            <TextBlock Text="Tableau de bord" FontSize="24"
+                       FontWeight="Bold" Foreground="#0D2137"/>
+            <TextBlock Text="Vue d'ensemble de l'activité"
+                       Foreground="#607D8B" FontSize="13" Margin="0,4,0,0"/>
+        </StackPanel>
 
-        <Border Style="{StaticResource CardStyle}">
-            <StackPanel>
-                <TextBlock Text="Export en cours (commande)"/>
-                    <TextBlock Text="{Binding ExportEnCours}" FontSize="22" FontWeight="Bold"/>
-            </StackPanel>
-        </Border>
+        <!-- CARDS LIGNE 1 -->
+        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,15">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="EXPORTS EN COURS" Foreground="#607D8B"
+                               FontSize="11" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding ExportEnCours}" FontSize="32"
+                               FontWeight="Bold" Foreground="#00B386" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
 
-        <Border Style="{StaticResource CardStyle}">
-            <StackPanel>
-                <TextBlock Text="Total Commandes"/>
-                    <TextBlock Text="{Binding TotalCommandes}" FontSize="22" FontWeight="Bold"/>
-            </StackPanel>
-        </Border>
+            <Border Style="{StaticResource CardStyle}" Margin="5,0">
+                <StackPanel>
+                    <TextBlock Text="TOTAL COMMANDES" Foreground="#607D8B"
+                               FontSize="11" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding TotalCommandes}" FontSize="32"
+                               FontWeight="Bold" Foreground="#0D2137" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
 
-        <Border Style="{StaticResource CardStyle}">
-            <StackPanel>
-                <TextBlock Text="Total Clients"/>
-                    <TextBlock Text="{Binding TotalClients}" FontSize="22" FontWeight="Bold"/>
-            </StackPanel>
-        </Border>
+            <Border Style="{StaticResource CardStyle}" Margin="5,0">
+                <StackPanel>
+                    <TextBlock Text="TOTAL CLIENTS" Foreground="#607D8B"
+                               FontSize="11" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding TotalClients}" FontSize="32"
+                               FontWeight="Bold" Foreground="#0D2137" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
 
-        <Border Style="{StaticResource CardStyle}">
-            <StackPanel>
-                <TextBlock Text="Total Fournisseurs"/>
-                    <TextBlock Text="{Binding TotalFournisseurs}" FontSize="22" FontWeight="Bold"/>
-            </StackPanel>
-        </Border>
+            <Border Style="{StaticResource CardStyle}" Margin="10,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="TOTAL FOURNISSEURS" Foreground="#607D8B"
+                               FontSize="11" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding TotalFournisseurs}" FontSize="32"
+                               FontWeight="Bold" Foreground="#0D2137" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
 
-    </UniformGrid>
+        <!-- CARDS LIGNE 2 -->
+        <UniformGrid Grid.Row="2" Columns="2" Margin="0,0,0,20">
+            <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0">
+                <StackPanel>
+                    <TextBlock Text="TOTAL PRODUITS" Foreground="#607D8B"
+                               FontSize="11" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding TotalProduits}" FontSize="32"
+                               FontWeight="Bold" Foreground="#0D2137" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
 
-    <DataGrid Grid.Row="2"
-              AutoGenerateColumns="False"
-              HeadersVisibility="Column"
-              CanUserAddRows="False"
-              ItemsSource="{Binding Commandes}">
+            <Border Style="{StaticResource CardStyle}" Margin="10,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="TOTAL STOCKS" Foreground="#607D8B"
+                               FontSize="11" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding TotalStocks}" FontSize="32"
+                               FontWeight="Bold" Foreground="#0D2137" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
 
-        <DataGrid.Columns>
-            <DataGridTextColumn Header="N° commande" Binding="{Binding NumeroCommande}"/>
-            <DataGridTextColumn Header="Date" Binding="{Binding DateCommande}"/>
-            <DataGridTextColumn Header="Client" Binding="{Binding Client.NomClient}"/>
-            <DataGridTextColumn Header="Produit" Binding="{Binding Produit.NomProduit}"/>
-            <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}"/>                <DataGridTextColumn Header="Destination" Binding="{Binding Destination}"/>
-            <DataGridTextColumn Header="Délai" Binding="{Binding Delai}"/>
-            <DataGridTextColumn Header="Statut" Binding="{Binding Statut}"/>
-        </DataGrid.Columns>
+        <!-- TABLEAU COMMANDES RÉCENTES -->
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-    </DataGrid>
+            <TextBlock Text="Commandes récentes" FontSize="16"
+                       FontWeight="SemiBold" Foreground="#0D2137"
+                       Margin="0,0,0,10"/>
 
-</Grid>
+            <DataGrid Grid.Row="1"
+                      Style="{StaticResource StyledDataGrid}"
+                      ItemsSource="{Binding Commandes}"
+                      CanUserAddRows="False">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader"
+                           BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell"
+                           BasedOn="{StaticResource StyledDataGridCell}"/>
+                </DataGrid.CellStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow"
+                           BasedOn="{StaticResource StyledDataGridRow}"/>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="N° commande"
+                                        Binding="{Binding NumeroCommande}" Width="100"/>
+                    <DataGridTextColumn Header="Date"
+                                        Binding="{Binding DateCommande, StringFormat=dd/MM/yyyy}"
+                                        Width="100"/>
+                    <DataGridTextColumn Header="Client"
+                                        Binding="{Binding Client.NomClient}" Width="*"/>
+                    <DataGridTextColumn Header="Destination"
+                                        Binding="{Binding Destination}" Width="*"/>
+                    <DataGridTextColumn Header="Délai"
+                                        Binding="{Binding Export.Delai}" Width="80"/>
+                    <DataGridTextColumn Header="Statut"
+                                        Binding="{Binding Export.Statut}" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
 
+    </Grid>
 </Page>

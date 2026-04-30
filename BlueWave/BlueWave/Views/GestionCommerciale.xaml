@@ -133,7 +133,111 @@
 				</Grid>
 			</TabItem>
 
-			<!-- COMMANDES -->
+            <!-- EXPORT -->
+            <TabItem Header="Exports">
+                <Grid Margin="0,15,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+                        <StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Délai -->
+                                <Grid Grid.Column="0" Margin="5">
+                                    <TextBox Height="35" VerticalContentAlignment="Center"
+                                 Text="{Binding ExportVm.Delai, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Text="Délai (jours)" IsHitTestVisible="False"
+                                   VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ExportVm.Delai}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ExportVm.Delai}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+
+                                <!-- Statut -->
+                                <ComboBox Grid.Column="1" Margin="5" Height="35"
+                              ItemsSource="{Binding ExportVm.Statuts}"
+                              SelectedItem="{Binding ExportVm.Statut}"/>
+
+                                <Button Grid.Column="2" Content="+ Ajouter" Margin="5"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding ExportVm.AddCommand}"/>
+                            </Grid>
+
+                            <TextBlock Text="{Binding ExportVm.MErrorMessage}"
+                           Foreground="Red" Margin="5,5,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ExportVm.MErrorMessage}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding ExportVm.MErrorMessage}" Value="">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <DataGrid Grid.Row="1"
+                  Style="{StaticResource StyledDataGrid}"
+                  ItemsSource="{Binding ExportVm.Exports}"
+                  SelectedItem="{Binding ExportVm.SelectedExport}">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader"
+                       BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
+                        </DataGrid.ColumnHeaderStyle>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell"
+                       BasedOn="{StaticResource StyledDataGridCell}"/>
+                        </DataGrid.CellStyle>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow"
+                       BasedOn="{StaticResource StyledDataGridRow}"/>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="N°" Binding="{Binding NumeroExport}" Width="60"/>
+                            <DataGridTextColumn Header="Délai" Binding="{Binding Delai}" Width="*"/>
+                            <DataGridTextColumn Header="Statut" Binding="{Binding Statut}" Width="*"/>
+                            <DataGridTemplateColumn Header="Action" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Supprimer"
+                                    Style="{StaticResource DangerButtonStyle}"
+                                    Command="{Binding DataContext.ExportVm.DeleteCommand,
+                                              RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+
+            <!-- COMMANDES -->
 			<TabItem Header="Commandes Export">
 				<Grid Margin="0,15,0,0">
 					<Grid.RowDefinitions>
@@ -151,17 +255,49 @@
 									<ColumnDefinition Width="Auto"/>
 								</Grid.ColumnDefinitions>
 
-								<ComboBox Grid.Column="0" Margin="5" Height="35"
-                                          ItemsSource="{Binding CommandeVm.Clients}"
-                                          DisplayMemberPath="NomClient"
-                                          SelectedItem="{Binding CommandeVm.SelectedClient}"/>
+                                <!-- Client -->
+                                <Grid Grid.Column="0" Margin="5">
+                                    <ComboBox Height="35"
+										  ItemsSource="{Binding CommandeVm.Clients}"
+										  DisplayMemberPath="NomClient"
+										  SelectedItem="{Binding CommandeVm.SelectedClient}"/>
+                                    <TextBlock Text="Sélectionner un client" IsHitTestVisible="False"
+										VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CommandeVm.SelectedClient}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
 
-								<ComboBox Grid.Column="1" Margin="5" Height="35"
-                                          ItemsSource="{Binding CommandeVm.Exports}"
-                                          DisplayMemberPath="NumeroExport"
-                                          SelectedItem="{Binding CommandeVm.SelectedExport}"/>
+                                <!-- Export -->
+                                <Grid Grid.Column="1" Margin="5">
+                                    <ComboBox Height="35"
+										  ItemsSource="{Binding CommandeVm.Exports}"
+										  DisplayMemberPath="NumeroExport"
+										  SelectedItem="{Binding CommandeVm.SelectedExport}"/>
+                                    <TextBlock Text="Sélectionner un export" IsHitTestVisible="False"
+										VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding CommandeVm.SelectedExport}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
 
-								<Grid Grid.Column="2" Margin="5">
+                                <Grid Grid.Column="2" Margin="5">
 									<TextBox Height="35" VerticalContentAlignment="Center"
                                              Text="{Binding CommandeVm.Destination, UpdateSourceTrigger=PropertyChanged}"/>
 									<TextBlock Text="Destination" IsHitTestVisible="False"
