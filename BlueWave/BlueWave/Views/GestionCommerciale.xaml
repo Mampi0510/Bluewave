@@ -34,50 +34,125 @@
 
 					<Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
 						<StackPanel>
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition/>
-									<ColumnDefinition/>
-									<ColumnDefinition/>
-									<ColumnDefinition Width="Auto"/>
-								</Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="140"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-								<Grid Grid.Column="0" Margin="5">
-									<TextBox Height="35" VerticalContentAlignment="Center"
-                                             Text="{Binding ApproVm.Certificat, UpdateSourceTrigger=PropertyChanged}"/>
-									<TextBlock Text="Certificat" IsHitTestVisible="False"
-                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
-										<TextBlock.Style>
-											<Style TargetType="TextBlock">
-												<Setter Property="Visibility" Value="Collapsed"/>
-												<Style.Triggers>
-													<DataTrigger Binding="{Binding ApproVm.Certificat}" Value="">
-														<Setter Property="Visibility" Value="Visible"/>
-													</DataTrigger>
-													<DataTrigger Binding="{Binding ApproVm.Certificat}" Value="{x:Null}">
-														<Setter Property="Visibility" Value="Visible"/>
-													</DataTrigger>
-												</Style.Triggers>
-											</Style>
-										</TextBlock.Style>
-									</TextBlock>
-								</Grid>
+                                <!-- Certificat -->
+                                <Grid Grid.Column="0" Margin="5">
+                                    <TextBox Height="35" VerticalContentAlignment="Center"
+                                    Text="{Binding ApproVm.Certificat, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Text="Certificat" IsHitTestVisible="False"
+                                        VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ApproVm.Certificat}" Value="">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding ApproVm.Certificat}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
 
-								<ComboBox Grid.Column="1" Margin="5" Height="35"
-                                          ItemsSource="{Binding ApproVm.Fournisseurs}"
-                                          DisplayMemberPath="NomFournisseur"
-                                          SelectedItem="{Binding ApproVm.SelectedFournisseur}"/>
+                                <!-- Fournisseur -->
+                                <Grid Grid.Column="1" Margin="5">
+                                    <ComboBox Height="35"
+                                      ItemsSource="{Binding ApproVm.Fournisseurs}"
+                                      DisplayMemberPath="NomFournisseur"
+                                      SelectedItem="{Binding ApproVm.SelectedFournisseur}"/>
+                                    <TextBlock Text="Fournisseur" IsHitTestVisible="False"
+                                         VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ApproVm.SelectedFournisseur}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
 
-								<ComboBox Grid.Column="2" Margin="5" Height="35"
-                                          ItemsSource="{Binding ApproVm.Produits}"
-                                          DisplayMemberPath="NomProduit"
-                                          SelectedItem="{Binding ApproVm.SelectedProduit}"/>
+                                <!-- Produit -->
+                                <Grid Grid.Column="2" Margin="5">
+                                    <ComboBox Height="35"
+                                      ItemsSource="{Binding ApproVm.Produits}"
+                                      DisplayMemberPath="NomProduit"
+                                      SelectedItem="{Binding ApproVm.SelectedProduit}"/>
+                                    <TextBlock Text="Produit" IsHitTestVisible="False"
+                                        VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ApproVm.SelectedProduit}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
 
-								<Button Grid.Column="3" Content="+ Ajouter" Margin="5"
-                                        Style="{StaticResource ActionButtonStyle}"
-                                        Command="{Binding ApproVm.AddCommand}"/>
-							</Grid>
-							<TextBlock Text="{Binding ApproVm.MErrorMessage}"
+                                <!-- Stock -->
+                                <Grid Grid.Column="3" Margin="5">
+                                    <ComboBox Height="35"
+                                      ItemsSource="{Binding ApproVm.Stocks}"
+                                      DisplayMemberPath="NomStock"
+                                      SelectedItem="{Binding ApproVm.SelectedStock}"/>
+                                    <TextBlock Text="Stock" IsHitTestVisible="False"
+                                        VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ApproVm.SelectedStock}" Value="{x:Null}">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+
+                                <!-- Quantite -->
+                                <Grid Grid.Column="4" Margin="5">
+                                    <TextBox Height="35" VerticalContentAlignment="Center"
+                                        Text="{Binding ApproVm.Quantite, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Text="Quantité" IsHitTestVisible="False"
+                                        VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ApproVm.Quantite}" Value="0">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Grid>
+
+                                <Button Grid.Column="5" Content="+ Ajouter" Margin="5"
+                                    Style="{StaticResource ActionButtonStyle}"
+                                    Command="{Binding ApproVm.AddCommand}"/>
+                            </Grid>
+                            <TextBlock Text="{Binding ApproVm.MErrorMessage}"
                                        Foreground="Red" Margin="5,5,0,0">
 								<TextBlock.Style>
 									<Style TargetType="TextBlock">
@@ -112,24 +187,27 @@
 							<Style TargetType="DataGridRow"
                                    BasedOn="{StaticResource StyledDataGridRow}"/>
 						</DataGrid.RowStyle>
-						<DataGrid.Columns>
-							<DataGridTextColumn Header="ID" Binding="{Binding IdApp}" Width="60"/>
-							<DataGridTextColumn Header="Certificat" Binding="{Binding Certificat}" Width="*"/>
-							<DataGridTextColumn Header="Fournisseur" Binding="{Binding Fournisseur.NomFournisseur}" Width="*"/>
-							<DataGridTextColumn Header="Produit" Binding="{Binding Produit.NomProduit}" Width="*"/>
-							<DataGridTemplateColumn Header="Action" Width="120">
-								<DataGridTemplateColumn.CellTemplate>
-									<DataTemplate>
-										<Button Content="Supprimer"
-                                                Style="{StaticResource DangerButtonStyle}"
-                                                Command="{Binding DataContext.ApproVm.DeleteCommand,
-                                                          RelativeSource={RelativeSource AncestorType=Page}}"
-                                                CommandParameter="{Binding}"/>
-									</DataTemplate>
-								</DataGridTemplateColumn.CellTemplate>
-							</DataGridTemplateColumn>
-						</DataGrid.Columns>
-					</DataGrid>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="ID" Binding="{Binding IdApp}" Width="50"/>
+                            <DataGridTextColumn Header="Certificat" Binding="{Binding Certificat}" Width="*"/>
+                            <DataGridTextColumn Header="Fournisseur" Binding="{Binding Fournisseur.NomFournisseur}" Width="*"/>
+                            <DataGridTextColumn Header="Produit" Binding="{Binding Produit.NomProduit}" Width="*"/>
+                            <DataGridTextColumn Header="Stock" Binding="{Binding Stock.NomStock}" Width="*"/>
+                            <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}" Width="80"/>
+                            <DataGridTextColumn Header="Date" Binding="{Binding DateReception, StringFormat=dd/MM/yyyy}" Width="100"/>
+                            <DataGridTemplateColumn Header="Action" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Supprimer"
+                        Style="{StaticResource DangerButtonStyle}"
+                        Command="{Binding DataContext.ApproVm.DeleteCommand,
+                                  RelativeSource={RelativeSource AncestorType=Page}}"
+                        CommandParameter="{Binding}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
 				</Grid>
 			</TabItem>
 
@@ -238,7 +316,7 @@
             </TabItem>
 
             <!-- COMMANDES -->
-			<TabItem Header="Commandes Export">
+			<TabItem Header="Commandes">
 				<Grid Margin="0,15,0,0">
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto"/>

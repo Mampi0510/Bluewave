@@ -29,5 +29,10 @@ namespace BlueWave.Data.Repositories{
             _context.Stock.Remove(stock);
             await _context.SaveChangesAsync();
         }
+        public async Task<IEnumerable<Approvisionnement>> GetApprovisionnementsByStock(int numeroStock) =>
+            await _context.Approvisionnement
+            .Include(a => a.Produit)
+            .Where(a => a.NumeroStock == numeroStock)
+            .ToListAsync();
     }
 }

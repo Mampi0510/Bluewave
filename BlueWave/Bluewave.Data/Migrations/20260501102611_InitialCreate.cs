@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bluewave.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class EnforceRequiredFields : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace Bluewave.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Client",
+                name: "CLIENT",
                 columns: table => new
                 {
                     RefClient = table.Column<int>(type: "int", nullable: false)
@@ -30,12 +30,12 @@ namespace Bluewave.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Client", x => x.RefClient);
+                    table.PrimaryKey("PK_CLIENT", x => x.RefClient);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Export",
+                name: "EXPORT",
                 columns: table => new
                 {
                     NumeroExport = table.Column<int>(type: "int", nullable: false)
@@ -46,12 +46,12 @@ namespace Bluewave.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Export", x => x.NumeroExport);
+                    table.PrimaryKey("PK_EXPORT", x => x.NumeroExport);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Fournisseur",
+                name: "FOURNISSEUR",
                 columns: table => new
                 {
                     RefFournisseur = table.Column<int>(type: "int", nullable: false)
@@ -65,82 +65,81 @@ namespace Bluewave.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Fournisseur", x => x.RefFournisseur);
+                    table.PrimaryKey("PK_FOURNISSEUR", x => x.RefFournisseur);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Stock",
+                name: "STOCK",
                 columns: table => new
                 {
                     NumeroStock = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                    NomStock = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Quantite = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Stock", x => x.NumeroStock);
+                    table.PrimaryKey("PK_STOCK", x => x.NumeroStock);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Commande",
+                name: "COMMANDE",
                 columns: table => new
                 {
                     NumeroCommande = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RefClient = table.Column<int>(type: "int", nullable: false),
-                    CodeExport = table.Column<int>(type: "int", nullable: false),
+                    NumeroExport = table.Column<int>(type: "int", nullable: false),
                     DateCommande = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Destination = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Commande", x => x.NumeroCommande);
+                    table.PrimaryKey("PK_COMMANDE", x => x.NumeroCommande);
                     table.ForeignKey(
-                        name: "FK_Commande_Client_RefClient",
+                        name: "FK_COMMANDE_CLIENT_RefClient",
                         column: x => x.RefClient,
-                        principalTable: "Client",
+                        principalTable: "CLIENT",
                         principalColumn: "RefClient",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Commande_Export_CodeExport",
-                        column: x => x.CodeExport,
-                        principalTable: "Export",
+                        name: "FK_COMMANDE_EXPORT_NumeroExport",
+                        column: x => x.NumeroExport,
+                        principalTable: "EXPORT",
                         principalColumn: "NumeroExport",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Produit",
+                name: "PRODUIT",
                 columns: table => new
                 {
                     CodeProduit = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NumeroStock = table.Column<int>(type: "int", nullable: false),
-                    NomProduit = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
+                    NomProduit = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Quantite = table.Column<int>(type: "int", nullable: false),
-                    Date_reception = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Statut = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Prix = table.Column<int>(type: "int", nullable: false),
+                    Statut = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    StockNumeroStock = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produit", x => x.CodeProduit);
+                    table.PrimaryKey("PK_PRODUIT", x => x.CodeProduit);
                     table.ForeignKey(
-                        name: "FK_Produit_Stock_NumeroStock",
-                        column: x => x.NumeroStock,
-                        principalTable: "Stock",
-                        principalColumn: "NumeroStock",
-                        onDelete: ReferentialAction.Cascade);
+                        name: "FK_PRODUIT_STOCK_StockNumeroStock",
+                        column: x => x.StockNumeroStock,
+                        principalTable: "STOCK",
+                        principalColumn: "NumeroStock");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Achat",
+                name: "ACHAT",
                 columns: table => new
                 {
                     IdAchat = table.Column<int>(type: "int", nullable: false)
@@ -151,113 +150,127 @@ namespace Bluewave.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Achat", x => x.IdAchat);
+                    table.PrimaryKey("PK_ACHAT", x => x.IdAchat);
                     table.ForeignKey(
-                        name: "FK_Achat_Commande_NumeroCommande",
+                        name: "FK_ACHAT_COMMANDE_NumeroCommande",
                         column: x => x.NumeroCommande,
-                        principalTable: "Commande",
+                        principalTable: "COMMANDE",
                         principalColumn: "NumeroCommande",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Achat_Produit_CodeProduit",
+                        name: "FK_ACHAT_PRODUIT_CodeProduit",
                         column: x => x.CodeProduit,
-                        principalTable: "Produit",
+                        principalTable: "PRODUIT",
                         principalColumn: "CodeProduit",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Approvisionnement",
+                name: "APPROVISIONNEMENT",
                 columns: table => new
                 {
                     IdApp = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RefFournisseur = table.Column<int>(type: "int", nullable: false),
                     CodeProduit = table.Column<int>(type: "int", nullable: false),
+                    NumeroStock = table.Column<int>(type: "int", nullable: false),
+                    Quantite = table.Column<int>(type: "int", nullable: false),
+                    DateReception = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Certificat = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Approvisionnement", x => x.IdApp);
+                    table.PrimaryKey("PK_APPROVISIONNEMENT", x => x.IdApp);
                     table.ForeignKey(
-                        name: "FK_Approvisionnement_Fournisseur_RefFournisseur",
+                        name: "FK_APPROVISIONNEMENT_FOURNISSEUR_RefFournisseur",
                         column: x => x.RefFournisseur,
-                        principalTable: "Fournisseur",
+                        principalTable: "FOURNISSEUR",
                         principalColumn: "RefFournisseur",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Approvisionnement_Produit_CodeProduit",
+                        name: "FK_APPROVISIONNEMENT_PRODUIT_CodeProduit",
                         column: x => x.CodeProduit,
-                        principalTable: "Produit",
+                        principalTable: "PRODUIT",
                         principalColumn: "CodeProduit",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_APPROVISIONNEMENT_STOCK_NumeroStock",
+                        column: x => x.NumeroStock,
+                        principalTable: "STOCK",
+                        principalColumn: "NumeroStock",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Achat_CodeProduit",
-                table: "Achat",
+                name: "IX_ACHAT_CodeProduit",
+                table: "ACHAT",
                 column: "CodeProduit");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Achat_NumeroCommande",
-                table: "Achat",
+                name: "IX_ACHAT_NumeroCommande",
+                table: "ACHAT",
                 column: "NumeroCommande");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Approvisionnement_CodeProduit",
-                table: "Approvisionnement",
+                name: "IX_APPROVISIONNEMENT_CodeProduit",
+                table: "APPROVISIONNEMENT",
                 column: "CodeProduit");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Approvisionnement_RefFournisseur",
-                table: "Approvisionnement",
+                name: "IX_APPROVISIONNEMENT_NumeroStock",
+                table: "APPROVISIONNEMENT",
+                column: "NumeroStock");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_APPROVISIONNEMENT_RefFournisseur",
+                table: "APPROVISIONNEMENT",
                 column: "RefFournisseur");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Commande_CodeExport",
-                table: "Commande",
-                column: "CodeExport");
+                name: "IX_COMMANDE_NumeroExport",
+                table: "COMMANDE",
+                column: "NumeroExport");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Commande_RefClient",
-                table: "Commande",
+                name: "IX_COMMANDE_RefClient",
+                table: "COMMANDE",
                 column: "RefClient");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Produit_NumeroStock",
-                table: "Produit",
-                column: "NumeroStock");
+                name: "IX_PRODUIT_StockNumeroStock",
+                table: "PRODUIT",
+                column: "StockNumeroStock");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Achat");
+                name: "ACHAT");
 
             migrationBuilder.DropTable(
-                name: "Approvisionnement");
+                name: "APPROVISIONNEMENT");
 
             migrationBuilder.DropTable(
-                name: "Commande");
+                name: "COMMANDE");
 
             migrationBuilder.DropTable(
-                name: "Fournisseur");
+                name: "FOURNISSEUR");
 
             migrationBuilder.DropTable(
-                name: "Produit");
+                name: "PRODUIT");
 
             migrationBuilder.DropTable(
-                name: "Client");
+                name: "CLIENT");
 
             migrationBuilder.DropTable(
-                name: "Export");
+                name: "EXPORT");
 
             migrationBuilder.DropTable(
-                name: "Stock");
+                name: "STOCK");
         }
     }
 }

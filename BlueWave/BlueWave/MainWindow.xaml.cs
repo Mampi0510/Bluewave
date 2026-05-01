@@ -5,25 +5,47 @@ namespace BlueWave
 {
     public partial class MainWindow : Window
     {
+        private Dashboard? _dashboard;
+        private GestionCommerciale? _gestionCommerciale;
+        private Produit? _produit;
+        private Stock? _stock;
+        private Annuaire? _annuaire;
+
         public MainWindow()
         {
             InitializeComponent();
-            MainFrame.Navigate(new Dashboard());
+            _dashboard = new Dashboard();
+            MainFrame.Navigate(_dashboard);
         }
 
         private void Dashboard_click(object sender, RoutedEventArgs e)
-            => MainFrame.Navigate(new Dashboard());
+        {
+            _dashboard ??= new Dashboard();
+            MainFrame.Navigate(_dashboard);
+        }
 
         private void GestionCommerciale_click(object sender, RoutedEventArgs e)
-            => MainFrame.Navigate(new GestionCommerciale());
+        {
+            _gestionCommerciale ??= new GestionCommerciale();
+            MainFrame.Navigate(_gestionCommerciale);
+        }
 
         private void Produit_click(object sender, RoutedEventArgs e)
-            => MainFrame.Navigate(new Produit());
+        {
+            _produit ??= new Produit();
+            MainFrame.Navigate(_produit);
+        }
 
         private void Stock_click(object sender, RoutedEventArgs e)
-            => MainFrame.Navigate(new Stock());
+        {
+            _stock ??= new Stock();
+            MainFrame.Navigate(_stock);
+        }
 
         private void Annuaire_click(object sender, RoutedEventArgs e)
-            => MainFrame.Navigate(new Annuaire());
+        {
+            _annuaire ??= new Annuaire();
+            MainFrame.Navigate(_annuaire);
+        }
     }
 }

@@ -9,11 +9,8 @@ namespace BlueWave.Core.Models
         public int NumeroStock { get; set; }
 
         [Required]
-        public string Type { get; set; } = string.Empty;
+        public string NomStock { get; set; } = string.Empty;
 
         public int Quantite { get; set; }
-
-        public ICollection<Produit> Produits { get; set; }
-            = new List<Produit>();  
     }
 }

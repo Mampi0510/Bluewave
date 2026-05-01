@@ -27,18 +27,17 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="140"/>
+                            <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
+                        <!-- Nom -->
                         <Grid Grid.Column="0" Margin="5">
                             <TextBox Height="35" VerticalContentAlignment="Center"
-                                     Text="{Binding NomProduit, UpdateSourceTrigger=PropertyChanged}"/>
+                            Text="{Binding NomProduit, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Nom du produit" IsHitTestVisible="False"
-                                       VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -55,21 +54,17 @@
                             </TextBlock>
                         </Grid>
 
-                        <ComboBox Grid.Column="1" Margin="5" Height="35"
-                                  ItemsSource="{Binding Stocks}"
-                                  DisplayMemberPath="Type"
-                                  SelectedItem="{Binding SelectedStock}"/>
-
-                        <Grid Grid.Column="2" Margin="5">
+                        <!-- Prix -->
+                        <Grid Grid.Column="1" Margin="5">
                             <TextBox Height="35" VerticalContentAlignment="Center"
-                                     Text="{Binding Quantite, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="Quantité" IsHitTestVisible="False"
-                                       VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                            Text="{Binding Prix, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Text="Prix" IsHitTestVisible="False"
+                                VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Quantite}" Value="0">
+                                            <DataTrigger Binding="{Binding Prix}" Value="0">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -78,17 +73,14 @@
                             </TextBlock>
                         </Grid>
 
-                        <DatePicker Grid.Column="3" Margin="5" Height="35"
-                                    SelectedDate="{Binding DateReception}"/>
+                        <!-- Statut -->
+                        <CheckBox Grid.Column="2" Margin="10,0" VerticalAlignment="Center"
+                            Content="Actif" IsChecked="{Binding Statut}"/>
 
-                        <CheckBox Grid.Column="4" Margin="10,0"
-                                  VerticalAlignment="Center"
-                                  Content="Actif"
-                                  IsChecked="{Binding Statut}"/>
-
-                        <Button Grid.Column="5" Content="+ Ajouter" Margin="5"
-                                Style="{StaticResource ActionButtonStyle}"
-                                Command="{Binding AddCommand}"/>
+                        <!-- Bouton -->
+                        <Button Grid.Column="3" Content="+ Ajouter" Margin="5"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding AddCommand}"/>
                     </Grid>
 
                     <TextBlock Text="{Binding MErrorMessage}" Foreground="Red" Margin="5,5,0,0">
@@ -128,20 +120,16 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ID" Binding="{Binding CodeProduit}" Width="60"/>
                     <DataGridTextColumn Header="Nom" Binding="{Binding NomProduit}" Width="*"/>
-                    <DataGridTextColumn Header="Stock" Binding="{Binding Stock.Type}" Width="120"/>
-                    <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}" Width="80"/>
-                    <DataGridTextColumn Header="Date réception"
-                                        Binding="{Binding Date_reception, StringFormat=dd/MM/yyyy}"
-                                        Width="130"/>
+                    <DataGridTextColumn Header="Prix (Ar)" Binding="{Binding Prix}" Width="100"/>
                     <DataGridCheckBoxColumn Header="Actif" Binding="{Binding Statut}" Width="60"/>
                     <DataGridTemplateColumn Header="Action" Width="120">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Content="Supprimer"
-                                        Style="{StaticResource DangerButtonStyle}"
-                                        Command="{Binding DataContext.DeleteCommand,
-                                                  RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"/>
+                        Style="{StaticResource DangerButtonStyle}"
+                        Command="{Binding DataContext.DeleteCommand,
+                                  RelativeSource={RelativeSource AncestorType=Page}}"
+                        CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

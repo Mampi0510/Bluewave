@@ -42,14 +42,14 @@ namespace BlueWave
                 services.AddTransient<IStockRepository, StockRepository>();
 
                 // viewmodels
-                services.AddTransient<StockViewModel>();
-                services.AddTransient<DashboardViewModel>();
-                services.AddTransient<ClientViewModel>();
-                services.AddTransient<CommandeViewModel>();
-                services.AddTransient<FournisseurViewModel>();
-                services.AddTransient<ProduitViewModel>();
-                services.AddTransient<ExportViewModel>();
-                services.AddTransient<ApprovisionnementViewModel>();
+                services.AddSingleton<StockViewModel>();
+                services.AddSingleton<DashboardViewModel>();
+                services.AddSingleton<ClientViewModel>();
+                services.AddSingleton<CommandeViewModel>();
+                services.AddSingleton<FournisseurViewModel>();
+                services.AddSingleton<ProduitViewModel>();
+                services.AddSingleton<ExportViewModel>();
+                services.AddSingleton<ApprovisionnementViewModel>();
 
 
                 ServiceProvider = services.BuildServiceProvider();

@@ -6,68 +6,183 @@
     <Grid Margin="30,25">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Margin="0,0,0,20">
-            <TextBlock Text="Gestion des Stocks" FontSize="24"
-                       FontWeight="Bold" Foreground="#0D2137"/>
-            <TextBlock Text="État des entrepôts et produits associés"
-                       Foreground="#607D8B" FontSize="13" Margin="0,4,0,0"/>
-        </StackPanel>
+        <!-- HEADER -->
+        <Grid Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Gestion des Stocks" FontSize="24"
+                           FontWeight="Bold" Foreground="#0D2137"/>
+                <TextBlock Text="État des entrepôts et produits associés"
+                           Foreground="#607D8B" FontSize="13" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Grid>
 
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <!-- FORMULAIRE -->
+        <Border Grid.Row="1" Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-            <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
+                    <Grid Grid.Column="0" Margin="5">
+                        <TextBox Height="35" VerticalContentAlignment="Center"
+                                 Text="{Binding NomStock, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="Nom du stock" IsHitTestVisible="False"
+                                   VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding NomStock}" Value="">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding NomStock}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+
+                    <Button Grid.Column="1" Content="+ Ajouter" Margin="5"
+                            Style="{StaticResource ActionButtonStyle}"
+                            Command="{Binding AddCommand}"/>
+                </Grid>
+
+                <TextBlock Text="{Binding MErrorMessage}" Foreground="Red" Margin="5,5,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding MErrorMessage}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </StackPanel>
+        </Border>
+
+        <!-- CONTENU PRINCIPAL -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- LISTE DES STOCKS -->
+            <DataGrid Style="{StaticResource StyledDataGrid}"
+              ItemsSource="{Binding Stocks}"
+              SelectedItem="{Binding SelectedStock}"
+              Margin="0,0,15,0">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader"
+                   BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell"
+                   BasedOn="{StaticResource StyledDataGridCell}"/>
+                </DataGrid.CellStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow"
+                   BasedOn="{StaticResource StyledDataGridRow}"/>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="N° Stock" Binding="{Binding NumeroStock}" Width="100"/>
+                    <DataGridTextColumn Header="Nom" Binding="{Binding NomStock}" Width="*"/>
+                    <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}" Width="100"/>
+                    <DataGridTemplateColumn Header="Action" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Supprimer"
+                                Style="{StaticResource DangerButtonStyle}"
+                                Command="{Binding DataContext.DeleteCommand,
+                                          RelativeSource={RelativeSource AncestorType=Page}}"
+                                CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- PANNEAU LATÉRAL -->
+            <Border Grid.Column="1" Background="White" CornerRadius="10"
+                BorderBrush="#E8ECF0" BorderThickness="1"
+                Width="280" Padding="20">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsPanelVisible}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
                 <StackPanel>
-                    <Grid>
+                    <Grid Margin="0,0,0,15">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-
-                        <Grid Grid.Column="0" Margin="5">
-                            <TextBox Height="35" VerticalContentAlignment="Center"
-                                     Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
-                            <TextBlock Text="Type de stock" IsHitTestVisible="False"
-                                       VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Type}" Value="">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Type}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </Grid>
-
-                        <StackPanel Grid.Column="1" Orientation="Horizontal">
-                            <Button Content="+ Ajouter" Margin="5"
-                                    Style="{StaticResource ActionButtonStyle}"
-                                    Command="{Binding AddCommand}"/>
-                        </StackPanel>
+                        <TextBlock Text="Produits du stock" FontSize="16"
+                           FontWeight="Bold" Foreground="#0D2137"/>
+                        <Button Grid.Column="1" Content="✕" Background="Transparent"
+                        BorderThickness="0" Foreground="#607D8B"
+                        Cursor="Hand" FontSize="14"
+                        Command="{Binding ClosePanelCommand}"/>
                     </Grid>
 
-                    <TextBlock Text="{Binding MErrorMessage}" Foreground="Red" Margin="5,5,0,0">
+                    <TextBlock Text="{Binding SelectedStockNom}"
+                       Foreground="#00B386" FontWeight="Bold"
+                       FontSize="14" Margin="0,0,0,15"/>
+
+                    <ItemsControl ItemsSource="{Binding ProduitsDuStock}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#F8FAFB" CornerRadius="6"
+                                Padding="12,10" Margin="0,0,0,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Produit.NomProduit}"
+                                           FontWeight="SemiBold" Foreground="#0D2137"/>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                            <TextBlock Text="Qté : " Foreground="#607D8B" FontSize="12"/>
+                                            <TextBlock Text="{Binding Quantite}"
+                                               FontWeight="Bold" Foreground="#00B386" FontSize="12"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="Aucun produit dans ce stock."
+                       Foreground="#9E9E9E" FontSize="13"
+                       HorizontalAlignment="Center" Margin="0,20,0,0">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Visibility" Value="Collapsed"/>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding MErrorMessage}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding MErrorMessage}" Value="">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    <DataTrigger Binding="{Binding ProduitsDuStock.Count}" Value="0">
+                                        <Setter Property="Visibility" Value="Visible"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -75,40 +190,6 @@
                     </TextBlock>
                 </StackPanel>
             </Border>
-
-            <DataGrid Grid.Row="1"
-                      Style="{StaticResource StyledDataGrid}"
-                      ItemsSource="{Binding Stocks}"
-                      SelectedItem="{Binding SelectedStock}">
-                <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="DataGridColumnHeader"
-                           BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
-                </DataGrid.ColumnHeaderStyle>
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell"
-                           BasedOn="{StaticResource StyledDataGridCell}"/>
-                </DataGrid.CellStyle>
-                <DataGrid.RowStyle>
-                    <Style TargetType="DataGridRow"
-                           BasedOn="{StaticResource StyledDataGridRow}"/>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding NumeroStock}" Width="60"/>
-                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="*"/>
-                    <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}" Width="100"/>
-                    <DataGridTemplateColumn Header="Action" Width="120">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Supprimer"
-                                        Style="{StaticResource DangerButtonStyle}"
-                                        Command="{Binding DataContext.DeleteCommand,
-                                                  RelativeSource={RelativeSource AncestorType=Page}}"
-                                        CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
         </Grid>
     </Grid>
 </Page>

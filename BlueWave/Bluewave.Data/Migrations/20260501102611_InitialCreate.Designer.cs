@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bluewave.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260429111027_EnforceRequiredFields")]
-    partial class EnforceRequiredFields
+    [Migration("20260501102611_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,7 +48,7 @@ namespace Bluewave.Data.Migrations
 
                     b.HasIndex("NumeroCommande");
 
-                    b.ToTable("Achat");
+                    b.ToTable("ACHAT", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Approvisionnement", b =>
@@ -67,6 +67,18 @@ namespace Bluewave.Data.Migrations
                     b.Property<int>("CodeProduit")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DateReception")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("DateReception");
+
+                    b.Property<int>("NumeroStock")
+                        .HasColumnType("int")
+                        .HasColumnName("NumeroStock");
+
+                    b.Property<int>("Quantite")
+                        .HasColumnType("int")
+                        .HasColumnName("Quantite");
+
                     b.Property<int>("RefFournisseur")
                         .HasColumnType("int");
 
@@ -74,9 +86,11 @@ namespace Bluewave.Data.Migrations
 
                     b.HasIndex("CodeProduit");
 
+                    b.HasIndex("NumeroStock");
+
                     b.HasIndex("RefFournisseur");
 
-                    b.ToTable("Approvisionnement");
+                    b.ToTable("APPROVISIONNEMENT", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Client", b =>
@@ -104,7 +118,7 @@ namespace Bluewave.Data.Migrations
 
                     b.HasKey("RefClient");
 
-                    b.ToTable("Client");
+                    b.ToTable("CLIENT", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Commande", b =>
@@ -115,9 +129,6 @@ namespace Bluewave.Data.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("NumeroCommande"));
 
-                    b.Property<int>("CodeExport")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateCommande")
                         .HasColumnType("datetime(6)");
 
@@ -126,23 +137,28 @@ namespace Bluewave.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
+                    b.Property<int>("NumeroExport")
+                        .HasColumnType("int")
+                        .HasColumnName("NumeroExport");
+
                     b.Property<int>("RefClient")
                         .HasColumnType("int");
 
                     b.HasKey("NumeroCommande");
 
-                    b.HasIndex("CodeExport");
+                    b.HasIndex("NumeroExport");
 
                     b.HasIndex("RefClient");
 
-                    b.ToTable("Commande");
+                    b.ToTable("COMMANDE", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Export", b =>
                 {
                     b.Property<int>("NumeroExport")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NumeroExport");
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("NumeroExport"));
 
@@ -155,7 +171,7 @@ namespace Bluewave.Data.Migrations
 
                     b.HasKey("NumeroExport");
 
-                    b.ToTable("Export");
+                    b.ToTable("EXPORT", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Fournisseur", b =>
@@ -183,7 +199,7 @@ namespace Bluewave.Data.Migrations
 
                     b.HasKey("RefFournisseur");
 
-                    b.ToTable("Fournisseur");
+                    b.ToTable("FOURNISSEUR", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Produit", b =>
@@ -194,28 +210,25 @@ namespace Bluewave.Data.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("CodeProduit"));
 
-                    b.Property<DateTime>("Date_reception")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<string>("NomProduit")
-                        .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("varchar(150)");
 
-                    b.Property<int>("NumeroStock")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantite")
-                        .HasColumnType("int");
+                    b.Property<int>("Prix")
+                        .HasColumnType("int")
+                        .HasColumnName("Prix");
 
                     b.Property<bool>("Statut")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<int?>("StockNumeroStock")
+                        .HasColumnType("int");
+
                     b.HasKey("CodeProduit");
 
-                    b.HasIndex("NumeroStock");
+                    b.HasIndex("StockNumeroStock");
 
-                    b.ToTable("Produit");
+                    b.ToTable("PRODUIT", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Stock", b =>
@@ -226,20 +239,24 @@ namespace Bluewave.Data.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("NumeroStock"));
 
-                    b.Property<string>("Type")
+                    b.Property<string>("NomStock")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
+                        .HasColumnType("longtext")
+                        .HasColumnName("NomStock");
+
+                    b.Property<int>("Quantite")
+                        .HasColumnType("int")
+                        .HasColumnName("Quantite");
 
                     b.HasKey("NumeroStock");
 
-                    b.ToTable("Stock");
+                    b.ToTable("STOCK", (string)null);
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Achat", b =>
                 {
                     b.HasOne("BlueWave.Core.Models.Produit", "Produit")
-                        .WithMany()
+                        .WithMany("Achats")
                         .HasForeignKey("CodeProduit")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -258,8 +275,14 @@ namespace Bluewave.Data.Migrations
             modelBuilder.Entity("BlueWave.Core.Models.Approvisionnement", b =>
                 {
                     b.HasOne("BlueWave.Core.Models.Produit", "Produit")
-                        .WithMany("Approvisionnement")
+                        .WithMany("Approvisionnements")
                         .HasForeignKey("CodeProduit")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BlueWave.Core.Models.Stock", "Stock")
+                        .WithMany()
+                        .HasForeignKey("NumeroStock")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -272,13 +295,15 @@ namespace Bluewave.Data.Migrations
                     b.Navigation("Fournisseur");
 
                     b.Navigation("Produit");
+
+                    b.Navigation("Stock");
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Commande", b =>
                 {
                     b.HasOne("BlueWave.Core.Models.Export", "Export")
                         .WithMany("Commande")
-                        .HasForeignKey("CodeExport")
+                        .HasForeignKey("NumeroExport")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -295,13 +320,9 @@ namespace Bluewave.Data.Migrations
 
             modelBuilder.Entity("BlueWave.Core.Models.Produit", b =>
                 {
-                    b.HasOne("BlueWave.Core.Models.Stock", "Stock")
-                        .WithMany("Produid")
-                        .HasForeignKey("NumeroStock")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Stock");
+                    b.HasOne("BlueWave.Core.Models.Stock", null)
+                        .WithMany("Produits")
+                        .HasForeignKey("StockNumeroStock");
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Client", b =>
@@ -321,12 +342,14 @@ namespace Bluewave.Data.Migrations
 
             modelBuilder.Entity("BlueWave.Core.Models.Produit", b =>
                 {
-                    b.Navigation("Approvisionnement");
+                    b.Navigation("Achats");
+
+                    b.Navigation("Approvisionnements");
                 });
 
             modelBuilder.Entity("BlueWave.Core.Models.Stock", b =>
                 {
-                    b.Navigation("Produid");
+                    b.Navigation("Produits");
                 });
 #pragma warning restore 612, 618
         }

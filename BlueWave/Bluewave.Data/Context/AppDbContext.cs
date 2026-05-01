@@ -22,7 +22,6 @@ namespace BlueWave.Data.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>().ToTable("CLIENT");
-            // supprime ou simplifie à :
             modelBuilder.Entity<Commande>().ToTable("COMMANDE");
             modelBuilder.Entity<Export>(entity =>
             {
@@ -35,14 +34,22 @@ namespace BlueWave.Data.Context
             modelBuilder.Entity<Stock>(entity =>
             {
                 entity.ToTable("STOCK");
-                entity.Property(s => s.Type).HasColumnName("Type");
+                entity.Property(s => s.NomStock).HasColumnName("NomStock");
                 entity.Property(s => s.Quantite).HasColumnName("Quantite");
             });
 
             modelBuilder.Entity<Produit>(entity =>
             {
                 entity.ToTable("PRODUIT");
-                entity.Property(p => p.Date_reception).HasColumnName("Date_reception");
+                entity.Property(p => p.Prix).HasColumnName("Prix");
+            });
+
+            modelBuilder.Entity<Approvisionnement>(entity =>
+            {
+                entity.ToTable("APPROVISIONNEMENT");
+                entity.Property(a => a.DateReception).HasColumnName("DateReception");
+                entity.Property(a => a.Quantite).HasColumnName("Quantite");
+                entity.Property(a => a.NumeroStock).HasColumnName("NumeroStock");
             });
         }
     }
