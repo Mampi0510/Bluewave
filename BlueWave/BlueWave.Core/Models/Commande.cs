@@ -8,10 +8,7 @@ namespace BlueWave.Core.Models
         [Key]
         public int NumeroCommande { get; set; }
         public int RefClient { get; set; }
-
-        [Column("NumeroExport")] 
-        public int NumeroExport { get; set; } 
-
+        public int Delai { get; set; }
         public DateTime DateCommande { get; set; }
 
         [Required]
@@ -21,7 +18,6 @@ namespace BlueWave.Core.Models
         [ForeignKey(nameof(RefClient))]
         public Client? Client { get; set; }
 
-        [ForeignKey(nameof(NumeroExport))] 
-        public Export? Export { get; set; }
+        public ICollection<Achat> Achats { get; set; } = new List<Achat>();
     }
 }

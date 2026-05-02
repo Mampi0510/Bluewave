@@ -15,7 +15,6 @@ namespace BlueWave.ViewModels
         [ObservableProperty] private int _totalCommandes;
         [ObservableProperty] private int _totalClients;
         [ObservableProperty] private int _totalFournisseurs;
-        [ObservableProperty] private int _exportEnCours;
         [ObservableProperty] private int _totalProduits;
         [ObservableProperty] private int _totalStocks;
 
@@ -33,12 +32,9 @@ namespace BlueWave.ViewModels
                 TotalFournisseurs = await _context.Fournisseur.CountAsync();
                 TotalProduits = await _context.Produit.CountAsync();
                 TotalStocks = await _context.Stock.CountAsync();
-                ExportEnCours = await _context.Export
-                                        .CountAsync(e => e.Statut == "En cours");
 
                 var commandes = await _context.Commande
                     .Include(c => c.Client)
-                    .Include(c => c.Export)
                     .OrderByDescending(c => c.DateCommande)
                     .Take(20)
                     .ToListAsync();

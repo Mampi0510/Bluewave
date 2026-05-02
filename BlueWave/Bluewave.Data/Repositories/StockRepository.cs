@@ -20,7 +20,13 @@ namespace BlueWave.Data.Repositories{
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateStock(Stock stock){
+        public async Task UpdateStock(Stock stock)
+        {
+            var local = _context.Stock.Local
+                            .FirstOrDefault(s => s.NumeroStock == stock.NumeroStock);
+            if (local != null)
+                _context.Entry(local).State = EntityState.Detached;
+
             _context.Stock.Update(stock);
             await _context.SaveChangesAsync();
         }

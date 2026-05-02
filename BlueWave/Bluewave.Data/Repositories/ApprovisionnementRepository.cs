@@ -48,5 +48,25 @@ namespace BlueWave.Data.Repositories
             _context.Approvisionnement.Remove(appro);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateApprovisionnement(Approvisionnement appro)
+        {
+            var local = _context.Approvisionnement.Local
+                            .FirstOrDefault(a => a.IdApp == appro.IdApp);
+            if (local != null)
+                _context.Entry(local).State = EntityState.Detached;
+
+            _context.Approvisionnement.Update(appro);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Approvisionnement?> GetLatestByProduit(int codeProduit)
+        {
+            return await _context.Approvisionnement
+                .AsNoTracking()     // empêche le tracking
+                .Where(a => a.CodeProduit == codeProduit)
+                .OrderByDescending(a => a.DateReception)
+                .FirstOrDefaultAsync();
+        }
     }
 }

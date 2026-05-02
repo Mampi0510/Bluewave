@@ -35,22 +35,6 @@ namespace Bluewave.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "EXPORT",
-                columns: table => new
-                {
-                    NumeroExport = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Delai = table.Column<int>(type: "int", nullable: false),
-                    Statut = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EXPORT", x => x.NumeroExport);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "FOURNISSEUR",
                 columns: table => new
                 {
@@ -66,6 +50,23 @@ namespace Bluewave.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FOURNISSEUR", x => x.RefFournisseur);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PRODUIT",
+                columns: table => new
+                {
+                    CodeProduit = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    NomProduit = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Prix = table.Column<int>(type: "int", nullable: false),
+                    Statut = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PRODUIT", x => x.CodeProduit);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -92,7 +93,7 @@ namespace Bluewave.Data.Migrations
                     NumeroCommande = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     RefClient = table.Column<int>(type: "int", nullable: false),
-                    NumeroExport = table.Column<int>(type: "int", nullable: false),
+                    Delai = table.Column<int>(type: "int", nullable: false),
                     DateCommande = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     Destination = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -105,63 +106,6 @@ namespace Bluewave.Data.Migrations
                         column: x => x.RefClient,
                         principalTable: "CLIENT",
                         principalColumn: "RefClient",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_COMMANDE_EXPORT_NumeroExport",
-                        column: x => x.NumeroExport,
-                        principalTable: "EXPORT",
-                        principalColumn: "NumeroExport",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "PRODUIT",
-                columns: table => new
-                {
-                    CodeProduit = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    NomProduit = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Prix = table.Column<int>(type: "int", nullable: false),
-                    Statut = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    StockNumeroStock = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PRODUIT", x => x.CodeProduit);
-                    table.ForeignKey(
-                        name: "FK_PRODUIT_STOCK_StockNumeroStock",
-                        column: x => x.StockNumeroStock,
-                        principalTable: "STOCK",
-                        principalColumn: "NumeroStock");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "ACHAT",
-                columns: table => new
-                {
-                    IdAchat = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CodeProduit = table.Column<int>(type: "int", nullable: false),
-                    NumeroCommande = table.Column<int>(type: "int", nullable: false),
-                    Quantite = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ACHAT", x => x.IdAchat);
-                    table.ForeignKey(
-                        name: "FK_ACHAT_COMMANDE_NumeroCommande",
-                        column: x => x.NumeroCommande,
-                        principalTable: "COMMANDE",
-                        principalColumn: "NumeroCommande",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ACHAT_PRODUIT_CodeProduit",
-                        column: x => x.CodeProduit,
-                        principalTable: "PRODUIT",
-                        principalColumn: "CodeProduit",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -204,6 +148,34 @@ namespace Bluewave.Data.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
+            migrationBuilder.CreateTable(
+                name: "ACHAT",
+                columns: table => new
+                {
+                    IdAchat = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CodeProduit = table.Column<int>(type: "int", nullable: false),
+                    NumeroCommande = table.Column<int>(type: "int", nullable: false),
+                    Quantite = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ACHAT", x => x.IdAchat);
+                    table.ForeignKey(
+                        name: "FK_ACHAT_COMMANDE_NumeroCommande",
+                        column: x => x.NumeroCommande,
+                        principalTable: "COMMANDE",
+                        principalColumn: "NumeroCommande",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ACHAT_PRODUIT_CodeProduit",
+                        column: x => x.CodeProduit,
+                        principalTable: "PRODUIT",
+                        principalColumn: "CodeProduit",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
             migrationBuilder.CreateIndex(
                 name: "IX_ACHAT_CodeProduit",
                 table: "ACHAT",
@@ -230,19 +202,9 @@ namespace Bluewave.Data.Migrations
                 column: "RefFournisseur");
 
             migrationBuilder.CreateIndex(
-                name: "IX_COMMANDE_NumeroExport",
-                table: "COMMANDE",
-                column: "NumeroExport");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_COMMANDE_RefClient",
                 table: "COMMANDE",
                 column: "RefClient");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PRODUIT_StockNumeroStock",
-                table: "PRODUIT",
-                column: "StockNumeroStock");
         }
 
         /// <inheritdoc />
@@ -264,13 +226,10 @@ namespace Bluewave.Data.Migrations
                 name: "PRODUIT");
 
             migrationBuilder.DropTable(
-                name: "CLIENT");
-
-            migrationBuilder.DropTable(
-                name: "EXPORT");
-
-            migrationBuilder.DropTable(
                 name: "STOCK");
+
+            migrationBuilder.DropTable(
+                name: "CLIENT");
         }
     }
 }

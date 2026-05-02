@@ -20,16 +20,7 @@
         </StackPanel>
 
         <!-- CARDS LIGNE 1 -->
-        <UniformGrid Grid.Row="1" Columns="4" Margin="0,0,0,15">
-            <Border Style="{StaticResource CardStyle}" Margin="0,0,10,0">
-                <StackPanel>
-                    <TextBlock Text="EXPORTS EN COURS" Foreground="#607D8B"
-                               FontSize="11" FontWeight="SemiBold"/>
-                    <TextBlock Text="{Binding ExportEnCours}" FontSize="32"
-                               FontWeight="Bold" Foreground="#00B386" Margin="0,8,0,0"/>
-                </StackPanel>
-            </Border>
-
+        <UniformGrid Grid.Row="1" Columns="3" Margin="0,0,0,15">
             <Border Style="{StaticResource CardStyle}" Margin="5,0">
                 <StackPanel>
                     <TextBlock Text="TOTAL COMMANDES" Foreground="#607D8B"
@@ -116,10 +107,6 @@
                                         Binding="{Binding Client.NomClient}" Width="*"/>
                     <DataGridTextColumn Header="Destination"
                                         Binding="{Binding Destination}" Width="*"/>
-                    <DataGridTextColumn Header="Délai"
-                                        Binding="{Binding Export.Delai}" Width="80"/>
-                    <DataGridTextColumn Header="Statut"
-                                        Binding="{Binding Export.Statut}" Width="100"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

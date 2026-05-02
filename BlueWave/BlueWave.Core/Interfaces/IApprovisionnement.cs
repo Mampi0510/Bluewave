@@ -9,5 +9,7 @@ namespace BlueWave.Core.Interfaces
         Task<IEnumerable<Approvisionnement>> GetAllApprovisionnement();
         Task AddApprovisionnement(Approvisionnement approvisionnement);
         Task DeleteApprovisionnement(Approvisionnement approvisionnement);
+        Task UpdateApprovisionnement(Approvisionnement approvisionnement); 
+        Task<Approvisionnement?> GetLatestByProduit(int codeProduit);
     }
 }

@@ -34,8 +34,6 @@ namespace BlueWave
                 services.AddTransient<IClientRepository, ClientRepository>();
                 services.AddTransient<ICommandeRepository, CommandeRepository>();
                 services.AddTransient<IFournisseurRepository, FournisseurRepository>();
-                services.AddTransient<ICommandeRepository, CommandeRepository>();
-                services.AddTransient<IExportRepository, ExportRepository>();
                 services.AddTransient<IProduitRepository, ProduitRepository>();
                 services.AddTransient<IAchatRepository, AchatRepository>();
                 services.AddTransient<IApprovisionnementRepository, ApprovisionnementRepository>();
@@ -48,7 +46,6 @@ namespace BlueWave
                 services.AddSingleton<CommandeViewModel>();
                 services.AddSingleton<FournisseurViewModel>();
                 services.AddSingleton<ProduitViewModel>();
-                services.AddSingleton<ExportViewModel>();
                 services.AddSingleton<ApprovisionnementViewModel>();
 
 

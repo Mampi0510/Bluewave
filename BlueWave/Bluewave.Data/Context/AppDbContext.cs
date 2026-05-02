@@ -17,17 +17,10 @@ namespace BlueWave.Data.Context
         public DbSet<Stock> Stock { get; set; }
         public DbSet<Achat> Achat { get; set; }
         public DbSet<Approvisionnement> Approvisionnement { get; set; }
-        public DbSet<Export> Export { get; set; }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Client>().ToTable("CLIENT");
-            modelBuilder.Entity<Commande>().ToTable("COMMANDE");
-            modelBuilder.Entity<Export>(entity =>
-            {
-                entity.ToTable("EXPORT");
-                entity.Property(e => e.NumeroExport).HasColumnName("NumeroExport");
-            }); modelBuilder.Entity<Fournisseur>().ToTable("FOURNISSEUR");
+            modelBuilder.Entity<Fournisseur>().ToTable("FOURNISSEUR");
             modelBuilder.Entity<Achat>().ToTable("ACHAT");
             modelBuilder.Entity<Approvisionnement>().ToTable("APPROVISIONNEMENT");
 
@@ -42,6 +35,15 @@ namespace BlueWave.Data.Context
             {
                 entity.ToTable("PRODUIT");
                 entity.Property(p => p.Prix).HasColumnName("Prix");
+            });
+
+            modelBuilder.Entity<Commande>(entity =>
+            {
+                entity.ToTable("COMMANDE");
+                entity.Property(c => c.Delai).HasColumnName("Delai");
+                entity.HasOne(c => c.Client)
+                      .WithMany(c => c.Commande)
+                      .HasForeignKey(c => c.RefClient);
             });
 
             modelBuilder.Entity<Approvisionnement>(entity =>

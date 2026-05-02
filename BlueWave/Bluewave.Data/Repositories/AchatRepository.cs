@@ -14,20 +14,17 @@ namespace BlueWave.Data.Repositories
             _context = context;
         }
 
-        public async Task<Achat?> GetAchatById(int Id) => await _context.Achat.FindAsync(Id);
-
-        public async Task<IEnumerable<Achat>> GetAllAchat() => await _context.Achat.ToListAsync();
-
-        public async Task<IEnumerable<Achat>> GetAchatByNumeroCommande(int numCommande) =>
+        public async Task<IEnumerable<Achat>> GetAllAchat() =>
             await _context.Achat
-                .Where(a => a.NumeroCommande == numCommande)
+                .Include(a => a.Produit)
+                .Include(a => a.Commande)
                 .ToListAsync();
 
         public async Task AddAchat(Achat achat)
         {
             await _context.Achat.AddAsync(achat);
 
-            // Diminuer la quantité du stock dans produit
+            // Diminuer le stock 
             var appro = await _context.Approvisionnement
                 .Where(a => a.CodeProduit == achat.CodeProduit)
                 .OrderByDescending(a => a.DateReception)
@@ -44,12 +41,6 @@ namespace BlueWave.Data.Repositories
                 }
             }
 
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateAchat(Achat achat)
-        {
-            _context.Achat.Update(achat);
             await _context.SaveChangesAsync();
         }
 
