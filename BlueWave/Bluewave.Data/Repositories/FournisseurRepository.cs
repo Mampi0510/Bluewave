@@ -18,7 +18,21 @@ namespace BlueWave.Data.Repositories{
             await _context.Fournisseur.FindAsync(refFournisseur);
 
 
-        public async Task<IEnumerable<Fournisseur>> GetAllFournisseur() => await _context.Fournisseur.ToListAsync();
+        public async Task<IEnumerable<Fournisseur>> GetAllFournisseur()
+        {
+            var founisseurs = await _context.Fournisseur
+            .OrderByDescending(f => f.RefFournisseur)
+            .ToListAsync();
+
+            foreach (var f in founisseurs)
+            {
+                f.NomFournisseur = f.NomFournisseur ?? "Inconnu";
+                f.PrenomsFournisseur = f.PrenomsFournisseur ?? "Inconnu";
+                f.TelephoneFournisseur = f.TelephoneFournisseur ?? "Non renseigné";
+            }
+
+            return founisseurs;
+        }
 
 
         public async Task AddFournisseur(Fournisseur fournisseur){

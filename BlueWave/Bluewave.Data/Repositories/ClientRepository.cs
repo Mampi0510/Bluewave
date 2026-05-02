@@ -17,9 +17,10 @@ namespace BlueWave.Data.Repositories{
         }
         public async Task<IEnumerable<Client>> GetAllClient()
         {
-            var clients = await _context.Client.ToListAsync();
+            var clients = await _context.Client
+                .OrderByDescending(c => c.RefClient) 
+                .ToListAsync();
 
-            // Remplacer les NULL par des valeurs par défaut
             foreach (var c in clients)
             {
                 c.Telephone = c.Telephone ?? "Non renseigné";

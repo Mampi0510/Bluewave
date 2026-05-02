@@ -16,6 +16,7 @@ namespace BlueWave.Data.Repositories
 
         public async Task<IEnumerable<Approvisionnement>> GetAllApprovisionnement() =>
             await _context.Approvisionnement
+            .OrderByDescending(a => a.IdApp)
                 .Include(a => a.Fournisseur)
                 .Include(a => a.Produit)  
                 .Include(a => a.Stock)    

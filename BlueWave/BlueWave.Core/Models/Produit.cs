@@ -11,7 +11,5 @@ namespace BlueWave.Core.Models
         public string? NomProduit { get; set; }
 
         public int Prix { get; set; }
-
-        public bool Statut { get; set; }
     }
 }

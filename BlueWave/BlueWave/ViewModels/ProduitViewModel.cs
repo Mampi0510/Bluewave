@@ -15,7 +15,6 @@ public partial class ProduitViewModel : ViewModelBase
     [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private string? _nomProduit;
     [ObservableProperty] private int _prix;
-    [ObservableProperty] private bool _statut;
     [ObservableProperty] private Produit? _selectedProduit;
 
     public ProduitViewModel(IProduitRepository produitRepository)
@@ -38,14 +37,12 @@ public partial class ProduitViewModel : ViewModelBase
             {
                 NomProduit = NomProduit,
                 Prix = Prix,
-                Statut = Statut
             };
 
             await _produitRepository.AddProduit(produit);
 
             NomProduit = string.Empty;
             Prix = 0;
-            Statut = false;
             MErrorMessage = null;
 
             await LoadDataAsync();

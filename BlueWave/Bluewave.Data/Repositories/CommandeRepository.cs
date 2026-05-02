@@ -16,6 +16,7 @@ namespace BlueWave.Data.Repositories
 
         public async Task<IEnumerable<Commande>> GetAllCommande() =>
             await _context.Commande
+            .OrderByDescending(c => c.NumeroCommande)
                 .Include(c => c.Client)
                 .ToListAsync();
 
