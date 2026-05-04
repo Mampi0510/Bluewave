@@ -17,6 +17,12 @@ public partial class ProduitViewModel : ViewModelBase
     [ObservableProperty] private int _prix;
     [ObservableProperty] private Produit? _selectedProduit;
 
+    // Sidebar edit
+    [ObservableProperty] private bool _isEditing;
+    [ObservableProperty] private string? _editNomProduit;
+    [ObservableProperty] private int _editPrix;
+    private int _editingCodeProduit;
+
     public ProduitViewModel(IProduitRepository produitRepository)
     {
         _produitRepository = produitRepository;
@@ -30,27 +36,67 @@ public partial class ProduitViewModel : ViewModelBase
             MErrorMessage = "Le nom du produit est obligatoire.";
             return;
         }
-
         try
         {
-            var produit = new Produit
+            await _produitRepository.AddProduit(new Produit
             {
                 NomProduit = NomProduit,
-                Prix = Prix,
-            };
-
-            await _produitRepository.AddProduit(produit);
+                Prix = Prix
+            });
 
             NomProduit = string.Empty;
             Prix = 0;
             MErrorMessage = null;
-
             await LoadDataAsync();
         }
-        catch (Exception ex)
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
+    }
+
+    [RelayCommand]
+    private void Edit(Produit? produit)
+    {
+        if (produit == null) return;
+        _editingCodeProduit = produit.CodeProduit;
+        EditNomProduit = produit.NomProduit;
+        EditPrix = produit.Prix;
+        IsEditing = true;
+        MErrorMessage = null;
+    }
+
+    [RelayCommand]
+    private void CancelEdit()
+    {
+        IsEditing = false;
+        _editingCodeProduit = 0;
+        EditNomProduit = null;
+        EditPrix = 0;
+    }
+
+    [RelayCommand]
+    private async Task SaveEdit()
+    {
+        if (string.IsNullOrWhiteSpace(EditNomProduit))
         {
-            MErrorMessage = $"Erreur : {ex.Message}";
+            MErrorMessage = "Le nom est obligatoire.";
+            return;
         }
+        try
+        {
+            await _produitRepository.UpdateProduit(new Produit
+            {
+                CodeProduit = _editingCodeProduit,
+                NomProduit = EditNomProduit,
+                Prix = EditPrix
+            });
+
+            IsEditing = false;
+            _editingCodeProduit = 0;
+            EditNomProduit = null;
+            EditPrix = 0;
+            MErrorMessage = null;
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
     }
 
     [RelayCommand]
@@ -76,7 +122,7 @@ public partial class ProduitViewModel : ViewModelBase
             var produits = await _produitRepository.GetAllProduit();
             foreach (var p in produits) Produits.Add(p);
         }
-        catch (Exception ex) { MErrorMessage = $"Erreur chargement : {ex.Message}"; }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
         finally { IsLoading = false; }
     }
 }

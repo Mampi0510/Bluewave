@@ -54,7 +54,7 @@
                         </TextBlock>
                     </Grid>
 
-                    <Button Grid.Column="1" Content="+ Ajouter" Margin="5"
+                    <Button Grid.Column="1" Content=" Ajouter" Margin="5"
                             Style="{StaticResource ActionButtonStyle}"
                             Command="{Binding AddCommand}"/>
                 </Grid>

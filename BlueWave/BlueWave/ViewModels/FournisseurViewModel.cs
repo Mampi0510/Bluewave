@@ -13,22 +13,18 @@ public partial class FournisseurViewModel : ViewModelBase
 
     public ObservableCollection<Fournisseur> Fournisseurs { get; } = new();
 
-    [ObservableProperty]
-    private bool _isLoading;
+    [ObservableProperty] private bool _isLoading;
+    [ObservableProperty] private string? _nomFournisseur;
+    [ObservableProperty] private string? _prenomsFournisseur;
+    [ObservableProperty] private string? _telephoneFournisseur;
+    [ObservableProperty] private Fournisseur? _selectedFournisseur;
 
-    [ObservableProperty] private int _refFournisseur;
-
-    [ObservableProperty]
-    private string? _nomFournisseur;
-
-    [ObservableProperty]
-    private string? _prenomsFournisseur;
-
-    [ObservableProperty]
-    private string? _telephoneFournisseur;
-
-    [ObservableProperty]
-    private Fournisseur? _selectedFournisseur;
+    // Sidebar edit
+    [ObservableProperty] private bool _isEditing;
+    [ObservableProperty] private string? _editNomFournisseur;
+    [ObservableProperty] private string? _editPrenomsFournisseur;
+    [ObservableProperty] private string? _editTelephoneFournisseur;
+    private int _editingRefFournisseur;
 
     public FournisseurViewModel(IFournisseurRepository repository)
     {
@@ -36,75 +32,101 @@ public partial class FournisseurViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task Add() => await AddFournisseurAsync();
+    private async Task Add()
+    {
+        if (string.IsNullOrWhiteSpace(NomFournisseur)) { MErrorMessage = "Le nom est obligatoire."; return; }
+        if (string.IsNullOrWhiteSpace(TelephoneFournisseur)) { MErrorMessage = "Le téléphone est obligatoire."; return; }
+
+        try
+        {
+            await _repository.AddFournisseur(new Fournisseur
+            {
+                NomFournisseur = NomFournisseur,
+                PrenomsFournisseur = PrenomsFournisseur ?? "",
+                TelephoneFournisseur = TelephoneFournisseur
+            });
+
+            NomFournisseur = string.Empty;
+            PrenomsFournisseur = string.Empty;
+            TelephoneFournisseur = string.Empty;
+            MErrorMessage = null;
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
+    }
 
     [RelayCommand]
-    private async Task Delete()
+    private void Edit(Fournisseur? fournisseur)
     {
-        if (SelectedFournisseur == null) return;
-        await DeleteFournisseurAsync(SelectedFournisseur);
-    }
-
-    public async Task AddFournisseurAsync()
-    {
-        if (string.IsNullOrWhiteSpace(NomFournisseur))
-        {
-            MErrorMessage = "Le nom est obligatoire.";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(TelephoneFournisseur))
-        {
-            MErrorMessage = "Le téléphone est obligatoire.";
-            return;
-        }
-
-        var fournisseur = new Fournisseur
-        {
-            NomFournisseur = NomFournisseur,
-            PrenomsFournisseur = PrenomsFournisseur ?? "",
-            TelephoneFournisseur = TelephoneFournisseur
-        };
-
-        await _repository.AddFournisseur(fournisseur);
-
-        // Vider les champs après ajout
-        NomFournisseur = string.Empty;
-        PrenomsFournisseur = string.Empty;
-        TelephoneFournisseur = string.Empty;
+        if (fournisseur == null) return;
+        _editingRefFournisseur = fournisseur.RefFournisseur;
+        EditNomFournisseur = fournisseur.NomFournisseur;
+        EditPrenomsFournisseur = fournisseur.PrenomsFournisseur;
+        EditTelephoneFournisseur = fournisseur.TelephoneFournisseur;
+        IsEditing = true;
         MErrorMessage = null;
-
-        await LoadDataAsync();
     }
 
-    public async Task DeleteFournisseurAsync(Fournisseur fournisseur)
+    [RelayCommand]
+    private void CancelEdit()
     {
-        await _repository.DeleteFournisseur(fournisseur);
-        await LoadDataAsync();
+        IsEditing = false;
+        _editingRefFournisseur = 0;
+        EditNomFournisseur = null;
+        EditPrenomsFournisseur = null;
+        EditTelephoneFournisseur = null;
     }
 
-    public async Task UpdateFournisseurAsync(Fournisseur fournisseur)
+    [RelayCommand]
+    private async Task SaveEdit()
     {
-        await _repository.UpdateFournisseur(fournisseur);
-        await LoadDataAsync();
+        if (string.IsNullOrWhiteSpace(EditNomFournisseur)) { MErrorMessage = "Le nom est obligatoire."; return; }
+        if (string.IsNullOrWhiteSpace(EditTelephoneFournisseur)) { MErrorMessage = "Le téléphone est obligatoire."; return; }
+
+        try
+        {
+            await _repository.UpdateFournisseur(new Fournisseur
+            {
+                RefFournisseur = _editingRefFournisseur,
+                NomFournisseur = EditNomFournisseur,
+                PrenomsFournisseur = EditPrenomsFournisseur ?? "",
+                TelephoneFournisseur = EditTelephoneFournisseur
+            });
+
+            IsEditing = false;
+            _editingRefFournisseur = 0;
+            EditNomFournisseur = null;
+            EditPrenomsFournisseur = null;
+            EditTelephoneFournisseur = null;
+            MErrorMessage = null;
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
+    }
+
+    [RelayCommand]
+    private async Task Delete(Fournisseur? fournisseur)
+    {
+        var cible = fournisseur ?? SelectedFournisseur;
+        if (cible == null) return;
+        try
+        {
+            await _repository.DeleteFournisseur(cible);
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
     }
 
     public async Task LoadDataAsync()
     {
         if (IsLoading) return;
-
         try
         {
             IsLoading = true;
             Fournisseurs.Clear();
-
             var data = await _repository.GetAllFournisseur();
-            foreach (var item in data)
-                Fournisseurs.Add(item);
+            foreach (var item in data) Fournisseurs.Add(item);
         }
-        finally
-        {
-            IsLoading = false;
-        }
+        finally { IsLoading = false; }
     }
 }

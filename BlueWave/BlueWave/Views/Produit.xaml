@@ -22,6 +22,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
+            <!-- Formulaire ajout -->
             <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
                 <StackPanel>
                     <Grid>
@@ -29,15 +30,13 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Nom -->
                         <Grid Grid.Column="0" Margin="5">
                             <TextBox Height="35" VerticalContentAlignment="Center"
-                            Text="{Binding NomProduit, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Text="{Binding NomProduit, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Nom du produit" IsHitTestVisible="False"
-                                VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                       VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -54,12 +53,11 @@
                             </TextBlock>
                         </Grid>
 
-                        <!-- Prix -->
                         <Grid Grid.Column="1" Margin="5">
                             <TextBox Height="35" VerticalContentAlignment="Center"
-                            Text="{Binding Prix, UpdateSourceTrigger=PropertyChanged}"/>
+                                     Text="{Binding Prix, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock Text="Prix" IsHitTestVisible="False"
-                                VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                                       VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -73,10 +71,9 @@
                             </TextBlock>
                         </Grid>
 
-                        <!-- Bouton -->
-                        <Button Grid.Column="3" Content="+ Ajouter" Margin="5"
-                            Style="{StaticResource ActionButtonStyle}"
-                            Command="{Binding AddCommand}"/>
+                        <Button Grid.Column="2" Content="+ Ajouter" Margin="5"
+                                Style="{StaticResource ActionButtonStyle}"
+                                Command="{Binding AddCommand}"/>
                     </Grid>
 
                     <TextBlock Text="{Binding MErrorMessage}" Foreground="Red" Margin="5,5,0,0">
@@ -97,39 +94,106 @@
                 </StackPanel>
             </Border>
 
-            <DataGrid Grid.Row="1"
-                      Style="{StaticResource StyledDataGrid}"
-                      ItemsSource="{Binding Produits}"
-                      SelectedItem="{Binding SelectedProduit}">
-                <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="DataGridColumnHeader"
-                           BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
-                </DataGrid.ColumnHeaderStyle>
-                <DataGrid.CellStyle>
-                    <Style TargetType="DataGridCell"
-                           BasedOn="{StaticResource StyledDataGridCell}"/>
-                </DataGrid.CellStyle>
-                <DataGrid.RowStyle>
-                    <Style TargetType="DataGridRow"
-                           BasedOn="{StaticResource StyledDataGridRow}"/>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="ID" Binding="{Binding CodeProduit}" Width="60"/>
-                    <DataGridTextColumn Header="Nom" Binding="{Binding NomProduit}" Width="*"/>
-                    <DataGridTextColumn Header="Prix (Ar)" Binding="{Binding Prix}" Width="100"/>
-                    <DataGridTemplateColumn Header="Action" Width="120">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Supprimer"
-                        Style="{StaticResource DangerButtonStyle}"
-                        Command="{Binding DataContext.DeleteCommand,
-                                  RelativeSource={RelativeSource AncestorType=Page}}"
-                        CommandParameter="{Binding}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <!-- DataGrid + Sidebar -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- DataGrid -->
+                <DataGrid Grid.Column="0"
+                          Style="{StaticResource StyledDataGrid}"
+                          ItemsSource="{Binding Produits}"
+                          SelectedItem="{Binding SelectedProduit}">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader"
+                               BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell"
+                               BasedOn="{StaticResource StyledDataGridCell}"/>
+                    </DataGrid.CellStyle>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow"
+                               BasedOn="{StaticResource StyledDataGridRow}"/>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding CodeProduit}" Width="60"/>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding NomProduit}" Width="*"/>
+                        <DataGridTextColumn Header="Prix (Ar)" Binding="{Binding Prix}" Width="100"/>
+                        <DataGridTemplateColumn Header="Action" Width="180">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Modifier"
+                                                Margin="0,0,5,0"
+                                                Style="{StaticResource ActionButtonStyle}"
+                                                Command="{Binding DataContext.EditCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"/>
+                                        <Button Content="Supprimer"
+                                                Style="{StaticResource DangerButtonStyle}"
+                                                Command="{Binding DataContext.DeleteCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Page}}"
+                                                CommandParameter="{Binding}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- SIDEBAR -->
+                <Border Grid.Column="1"
+                        Width="280" Margin="15,0,0,0"
+                        Background="White" CornerRadius="12" Padding="20">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditing}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="15" Opacity="0.08"
+                                          ShadowDepth="2" Direction="270"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <Grid Margin="0,0,0,16">
+                            <TextBlock Text="Modifier le produit"
+                                       FontSize="14" FontWeight="SemiBold"
+                                       Foreground="#0D2137" VerticalAlignment="Center"/>
+                            <Button HorizontalAlignment="Right"
+                                    Content="✕" Width="24" Height="24"
+                                    Background="Transparent" BorderThickness="0"
+                                    Foreground="#9E9E9E" FontSize="12" Padding="0"
+                                    Command="{Binding CancelEditCommand}"/>
+                        </Grid>
+
+                        <TextBlock Text="Nom du produit" FontSize="11"
+                                   Foreground="#607D8B" Margin="0,0,0,4"/>
+                        <TextBox Height="35" VerticalContentAlignment="Center"
+                                 Margin="0,0,0,12"
+                                 Text="{Binding EditNomProduit, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Text="Prix (Ar)" FontSize="11"
+                                   Foreground="#607D8B" Margin="0,0,0,4"/>
+                        <TextBox Height="35" VerticalContentAlignment="Center"
+                                 Margin="0,0,0,20"
+                                 Text="{Binding EditPrix, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <Button Content="✔ Enregistrer"
+                                Style="{StaticResource ActionButtonStyle}"
+                                HorizontalAlignment="Stretch"
+                                Command="{Binding SaveEditCommand}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

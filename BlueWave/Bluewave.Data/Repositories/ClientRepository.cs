@@ -36,8 +36,15 @@ namespace BlueWave.Data.Repositories{
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateClient(Client client){
-            _context.Client.Update(client);
+        public async Task UpdateClient(Client client)
+        {
+            var tracked = _context.Client.Local
+                              .FirstOrDefault(c => c.RefClient == client.RefClient);
+            if (tracked != null)
+                _context.Entry(tracked).CurrentValues.SetValues(client);
+            else
+                _context.Client.Update(client);
+
             await _context.SaveChangesAsync();
         }
 

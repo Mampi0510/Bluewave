@@ -13,16 +13,18 @@ public partial class ClientViewModel : ViewModelBase
 
     public ObservableCollection<Client> Clients { get; } = new();
 
-    [ObservableProperty]
-    private bool _isLoading;
-
-    [ObservableProperty] private int _refClient;
+    [ObservableProperty] private bool _isLoading;
     [ObservableProperty] private string? _nomClient;
     [ObservableProperty] private string? _prenomClient;
     [ObservableProperty] private string? _telephone;
+    [ObservableProperty] private Client? _selectedClient;
 
-    [ObservableProperty]
-    private Client? _selectedClient;
+    // Sidebar edit
+    [ObservableProperty] private bool _isEditing;
+    [ObservableProperty] private string? _editNomClient;
+    [ObservableProperty] private string? _editPrenomClient;
+    [ObservableProperty] private string? _editTelephone;
+    private int _editingRefClient;
 
     public ClientViewModel(IClientRepository repository)
     {
@@ -32,77 +34,99 @@ public partial class ClientViewModel : ViewModelBase
     [RelayCommand]
     private async Task Add()
     {
-        await AddClientAsync();
+        if (string.IsNullOrWhiteSpace(NomClient)) { MErrorMessage = "Le nom est obligatoire."; return; }
+        if (string.IsNullOrWhiteSpace(Telephone)) { MErrorMessage = "Le téléphone est obligatoire."; return; }
+
+        try
+        {
+            await _repository.AddClient(new Client
+            {
+                NomClient = NomClient,
+                PrenomClient = PrenomClient ?? "",
+                Telephone = Telephone
+            });
+
+            NomClient = string.Empty;
+            PrenomClient = string.Empty;
+            Telephone = string.Empty;
+            MErrorMessage = null;
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
     }
 
     [RelayCommand]
-    private async Task Delete()
+    private void Edit(Client? client)
     {
-        if (SelectedClient == null) return;
-
-        await DeleteClientAsync(SelectedClient);
-    }
-
-    public async Task AddClientAsync()
-    {
-        if (string.IsNullOrWhiteSpace(Telephone))
-        {
-            MErrorMessage = "Le téléphone est obligatoire.";
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(NomClient))
-        {
-            MErrorMessage = "Le nom est obligatoire.";
-            return;
-        }
-        var client = new Client
-        {
-            NomClient = NomClient ?? "",
-            PrenomClient = PrenomClient ?? "",
-            Telephone = Telephone ?? ""
-        };
-
-        await _repository.AddClient(client);
-
-        NomClient = string.Empty;
-        PrenomClient = string.Empty;
-        Telephone = string.Empty;
+        if (client == null) return;
+        _editingRefClient = client.RefClient;
+        EditNomClient = client.NomClient;
+        EditPrenomClient = client.PrenomClient;
+        EditTelephone = client.Telephone;
+        IsEditing = true;
         MErrorMessage = null;
-        await LoadDataAsync();
     }
 
-    public async Task DeleteClientAsync(Client client)
+    [RelayCommand]
+    private void CancelEdit()
     {
-        await _repository.DeleteClient(client);
-        await LoadDataAsync();
+        IsEditing = false;
+        _editingRefClient = 0;
+        EditNomClient = null;
+        EditPrenomClient = null;
+        EditTelephone = null;
     }
 
-    public async Task UpdateClientAsync(Client client)
+    [RelayCommand]
+    private async Task SaveEdit()
     {
-        await _repository.UpdateClient(client);
-        await LoadDataAsync();
+        if (string.IsNullOrWhiteSpace(EditNomClient)) { MErrorMessage = "Le nom est obligatoire."; return; }
+        if (string.IsNullOrWhiteSpace(EditTelephone)) { MErrorMessage = "Le téléphone est obligatoire."; return; }
+
+        try
+        {
+            await _repository.UpdateClient(new Client
+            {
+                RefClient = _editingRefClient,
+                NomClient = EditNomClient,
+                PrenomClient = EditPrenomClient ?? "",
+                Telephone = EditTelephone
+            });
+
+            IsEditing = false;
+            _editingRefClient = 0;
+            EditNomClient = null;
+            EditPrenomClient = null;
+            EditTelephone = null;
+            MErrorMessage = null;
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
+    }
+
+    [RelayCommand]
+    private async Task Delete(Client? client)
+    {
+        var cible = client ?? SelectedClient;
+        if (cible == null) return;
+        try
+        {
+            await _repository.DeleteClient(cible);
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
     }
 
     public async Task LoadDataAsync()
     {
         if (IsLoading) return;
-
         try
         {
             IsLoading = true;
             Clients.Clear();
-
             var data = await _repository.GetAllClient();
-            
-            foreach (var item in data)
-            {
-                Clients.Add(item);
-            }
+            foreach (var item in data) Clients.Add(item);
         }
-        finally
-        {
-            IsLoading = false;
-        }
+        finally { IsLoading = false; }
     }
 }

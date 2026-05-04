@@ -40,8 +40,15 @@ namespace BlueWave.Data.Repositories{
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateFournisseur(Fournisseur fournisseur){
-            _context.Fournisseur.Update(fournisseur);
+        public async Task UpdateFournisseur(Fournisseur fournisseur)
+        {
+            var tracked = _context.Fournisseur.Local
+                              .FirstOrDefault(f => f.RefFournisseur == fournisseur.RefFournisseur);
+            if (tracked != null)
+                _context.Entry(tracked).CurrentValues.SetValues(fournisseur);
+            else
+                _context.Fournisseur.Update(fournisseur);
+
             await _context.SaveChangesAsync();
         }
 

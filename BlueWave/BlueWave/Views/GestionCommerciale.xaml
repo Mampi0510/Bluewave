@@ -148,7 +148,7 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <Button Grid.Column="5" Content="+ Ajouter" Margin="5"
+                                <Button Grid.Column="5" Content=" Ajouter" Margin="5"
                                         Style="{StaticResource ActionButtonStyle}"
                                         Command="{Binding ApproVm.AddCommand}"/>
                             </Grid>
@@ -339,7 +339,7 @@
                                 </Grid>
 
                                 <!-- Bouton unique -->
-                                <Button Grid.Column="5" Content="+ Ajouter" Margin="5"
+                                <Button Grid.Column="5" Content=" Ajouter" Margin="5"
                                         Style="{StaticResource ActionButtonStyle}"
                                         Command="{Binding CommandeVm.AddCommand}"/>
                             </Grid>

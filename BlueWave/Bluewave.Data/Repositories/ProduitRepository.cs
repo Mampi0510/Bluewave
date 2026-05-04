@@ -28,7 +28,13 @@ namespace BlueWave.Data.Repositories
 
         public async Task UpdateProduit(Produit produit)
         {
-            _context.Produit.Update(produit);
+            var tracked = _context.Produit.Local
+                              .FirstOrDefault(p => p.CodeProduit == produit.CodeProduit);
+            if (tracked != null)
+                _context.Entry(tracked).CurrentValues.SetValues(produit);
+            else
+                _context.Produit.Update(produit);
+
             await _context.SaveChangesAsync();
         }
 
