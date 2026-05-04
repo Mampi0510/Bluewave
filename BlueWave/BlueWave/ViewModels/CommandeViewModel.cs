@@ -1,10 +1,9 @@
-using BlueWave.Core.Interfaces;
-using BlueWave.Core.Models;
-using BlueWave.Data.Repositories;
-using BlueWave.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using BlueWave.Core.Interfaces;
+using BlueWave.Core.Models;
+using BlueWave.Services;
 
 namespace BlueWave.ViewModels
 {
@@ -20,8 +19,7 @@ namespace BlueWave.ViewModels
         public ObservableCollection<Commande> Commandes { get; } = new();
         public ObservableCollection<Client> Clients { get; } = new();
         public ObservableCollection<Produit> Produits { get; } = new();
-
-        public ObservableCollection<Achat> AchatsEnCours { get; } = new();
+        public ObservableCollection<PanierItem> Panier { get; } = new();
 
         [ObservableProperty] private bool _isLoading;
         [ObservableProperty] private Client? _selectedClient;
@@ -53,21 +51,37 @@ namespace BlueWave.ViewModels
             _stockRepository = stockRepository;
         }
 
-        // Ajouter un produit au panier local
+        // Ajouter au panier
         [RelayCommand]
-        private void AddAchatEnCours()
+        private async Task AddAuPanier()
         {
             if (SelectedProduit == null) { MErrorMessage = "Sélectionnez un produit."; return; }
-            if (QuantiteAchat <= 0) { MErrorMessage = "La quantité doit être supérieure à 0."; return; }
+            if (QuantiteAchat <= 0) { MErrorMessage = "La quantité est obligatoire."; return; }
 
-            var existant = AchatsEnCours.FirstOrDefault(a => a.CodeProduit == SelectedProduit.CodeProduit);
+            // Vérifier stock disponible
+            var appro = await _approvisionnementRepository.GetLatestByProduit(SelectedProduit.CodeProduit);
+            if (appro == null) { MErrorMessage = "Aucun approvisionnement pour ce produit."; return; }
+
+            // Quantité déjà dans le panier pour ce produit
+            var dejaDansPanier = Panier
+                .Where(p => p.CodeProduit == SelectedProduit.CodeProduit)
+                .Sum(p => p.Quantite);
+
+            if (appro.Quantite - dejaDansPanier < QuantiteAchat)
+            {
+                MErrorMessage = $"Stock insuffisant. Disponible : {appro.Quantite - dejaDansPanier}";
+                return;
+            }
+
+            // Ajouter ou fusionner dans le panier
+            var existant = Panier.FirstOrDefault(p => p.CodeProduit == SelectedProduit.CodeProduit);
             if (existant != null)
                 existant.Quantite += QuantiteAchat;
             else
-                AchatsEnCours.Add(new Achat
+                Panier.Add(new PanierItem
                 {
                     CodeProduit = SelectedProduit.CodeProduit,
-                    Produit = SelectedProduit,
+                    NomProduit = SelectedProduit.NomProduit ?? "",
                     Quantite = QuantiteAchat
                 });
 
@@ -76,38 +90,24 @@ namespace BlueWave.ViewModels
             MErrorMessage = null;
         }
 
-        // Retirer un produit du panier
+        // Retirer du panier
         [RelayCommand]
-        private void RemoveAchatEnCours(Achat achat)
+        private void RetirerDuPanier(PanierItem item)
         {
-            AchatsEnCours.Remove(achat);
+            Panier.Remove(item);
         }
 
-        // Créer la commande 
+        // Créer la commande
         [RelayCommand]
         private async Task Add()
         {
             if (SelectedClient == null) { MErrorMessage = "Sélectionnez un client."; return; }
             if (string.IsNullOrWhiteSpace(Destination)) { MErrorMessage = "La destination est obligatoire."; return; }
             if (Delai <= 0) { MErrorMessage = "Le délai est obligatoire."; return; }
-            if (SelectedProduit == null) { MErrorMessage = "Sélectionnez un produit."; return; }
-            if (QuantiteAchat <= 0) { MErrorMessage = "La quantité est obligatoire."; return; }
+            if (Panier.Count == 0) { MErrorMessage = "Ajoutez au moins un produit."; return; }
 
             try
             {
-                var appro = await _approvisionnementRepository.GetLatestByProduit(SelectedProduit.CodeProduit);
-                if (appro == null)
-                {
-                    MErrorMessage = "Aucun approvisionnement trouvé pour ce produit.";
-                    return;
-                }
-
-                if (appro.Quantite < QuantiteAchat)
-                {
-                    MErrorMessage = $"Stock insuffisant. Disponible : {appro.Quantite}";
-                    return;
-                }
-
                 var commande = new Commande
                 {
                     RefClient = SelectedClient.RefClient,
@@ -117,23 +117,29 @@ namespace BlueWave.ViewModels
                 };
                 await _commandeRepository.AddCommande(commande);
 
-                // AddAchat décrémente déjà le stock dans le repo
-                await _achatRepository.AddAchat(new Achat
+                foreach (var item in Panier)
                 {
-                    CodeProduit = SelectedProduit.CodeProduit,
-                    NumeroCommande = commande.NumeroCommande,
-                    Quantite = QuantiteAchat
-                });
+                    // Créer l'achat (décrémente le stock via AchatRepository)
+                    await _achatRepository.AddAchat(new Achat
+                    {
+                        CodeProduit = item.CodeProduit,
+                        NumeroCommande = commande.NumeroCommande,
+                        Quantite = item.Quantite
+                    });
 
-                // Décrémenter uniquement l'appro
-                appro.Quantite -= QuantiteAchat;
-                await _approvisionnementRepository.UpdateApprovisionnement(appro);
+                    // Décrémenter l'appro
+                    var appro = await _approvisionnementRepository.GetLatestByProduit(item.CodeProduit);
+                    if (appro != null)
+                    {
+                        appro.Quantite -= item.Quantite;
+                        await _approvisionnementRepository.UpdateApprovisionnement(appro);
+                    }
+                }
 
                 SelectedClient = null;
                 Destination = string.Empty;
                 Delai = 0;
-                SelectedProduit = null;
-                QuantiteAchat = 0;
+                Panier.Clear();
                 MErrorMessage = null;
 
                 await LoadDataAsync();
@@ -156,11 +162,11 @@ namespace BlueWave.ViewModels
                         var appro = await _approvisionnementRepository.GetLatestByProduit(achat.CodeProduit);
                         if (appro != null)
                         {
+                            appro.Quantite += achat.Quantite;
                             await _approvisionnementRepository.UpdateApprovisionnement(appro);
                         }
                     }
                 }
-
                 await _commandeRepository.DeleteCommande(cible);
                 await LoadDataAsync();
             }
@@ -199,5 +205,13 @@ namespace BlueWave.ViewModels
             catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
             finally { IsLoading = false; }
         }
+    }
+
+    // Classe panier locale
+    public partial class PanierItem : ObservableObject
+    {
+        public int CodeProduit { get; set; }
+        public string NomProduit { get; set; } = "";
+        [ObservableProperty] private int _quantite;
     }
 }

@@ -17,9 +17,13 @@ namespace BlueWave.Data.Repositories
         public async Task<Produit?> GetProduitByCode(int codeProduit) =>
             await _context.Produit.FindAsync(codeProduit);
 
-        public async Task<IEnumerable<Produit>> GetAllProduit() =>
-            await _context.Produit.ToListAsync();
-
+        public async Task<IEnumerable<Produit>> GetAllProduit()
+        {
+            var produits = await _context.Produit
+                .OrderByDescending(p => p.CodeProduit)
+                .ToListAsync();
+            return produits;
+        }
         public async Task AddProduit(Produit produit)
         {
             await _context.Produit.AddAsync(produit);

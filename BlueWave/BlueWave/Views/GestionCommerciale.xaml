@@ -223,27 +223,23 @@
                     <Border Style="{StaticResource CardStyle}" Margin="0,0,0,15">
                         <StackPanel>
                             <TextBlock Text="Nouvelle commande" Foreground="#607D8B"
-                                       FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                   FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
-                            <!-- LIGNE UNIQUE : tout en une seule ligne -->
-                            <Grid Margin="0,0,0,6">
+                            <!-- LIGNE 1 : Client / Destination / Délai -->
+                            <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Client -->
                                 <Grid Grid.Column="0" Margin="5">
                                     <ComboBox Height="35"
-                                              ItemsSource="{Binding CommandeVm.Clients}"
-                                              DisplayMemberPath="NomClient"
-                                              SelectedItem="{Binding CommandeVm.SelectedClient}"/>
+                          ItemsSource="{Binding CommandeVm.Clients}"
+                          DisplayMemberPath="NomClient"
+                          SelectedItem="{Binding CommandeVm.SelectedClient}"/>
                                     <TextBlock Text="Sélectionner un client" IsHitTestVisible="False"
-                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                           VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -257,12 +253,11 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <!-- Destination -->
                                 <Grid Grid.Column="1" Margin="5">
                                     <TextBox Height="35" VerticalContentAlignment="Center"
-                                             Text="{Binding CommandeVm.Destination, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding CommandeVm.Destination, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Text="Destination" IsHitTestVisible="False"
-                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                           VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -279,12 +274,11 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <!-- Délai -->
                                 <Grid Grid.Column="2" Margin="5">
                                     <TextBox Height="35" VerticalContentAlignment="Center"
-                                             Text="{Binding CommandeVm.Delai, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding CommandeVm.Delai, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Text="Délai (j)" IsHitTestVisible="False"
-                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                           VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -297,15 +291,23 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                 </Grid>
+                            </Grid>
 
-                                <!-- Produit -->
-                                <Grid Grid.Column="3" Margin="5">
+                            <!-- LIGNE 2 : Produit / Quantité / Bouton ajouter au panier -->
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0" Margin="5">
                                     <ComboBox Height="35"
-                                              ItemsSource="{Binding CommandeVm.Produits}"
-                                              DisplayMemberPath="NomProduit"
-                                              SelectedItem="{Binding CommandeVm.SelectedProduit}"/>
+                          ItemsSource="{Binding CommandeVm.Produits}"
+                          DisplayMemberPath="NomProduit"
+                          SelectedItem="{Binding CommandeVm.SelectedProduit}"/>
                                     <TextBlock Text="Sélectionner un produit" IsHitTestVisible="False"
-                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                           VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -319,12 +321,11 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <!-- Quantité -->
-                                <Grid Grid.Column="4" Margin="5">
+                                <Grid Grid.Column="1" Margin="5">
                                     <TextBox Height="35" VerticalContentAlignment="Center"
-                                             Text="{Binding CommandeVm.QuantiteAchat, UpdateSourceTrigger=PropertyChanged}"/>
+                         Text="{Binding CommandeVm.QuantiteAchat, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Text="Quantité" IsHitTestVisible="False"
-                                               VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
+                           VerticalAlignment="Center" Margin="8,0" Foreground="#9E9E9E">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -338,15 +339,61 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <!-- Bouton unique -->
-                                <Button Grid.Column="5" Content=" Ajouter" Margin="5"
-                                        Style="{StaticResource ActionButtonStyle}"
-                                        Command="{Binding CommandeVm.AddCommand}"/>
+                                <Button Grid.Column="2" Content="+ Produit" Margin="5"
+                    Style="{StaticResource ActionButtonStyle}"
+                    Command="{Binding CommandeVm.AddAuPanierCommand}"/>
                             </Grid>
+
+                            <!-- PANIER -->
+                            <ItemsControl ItemsSource="{Binding CommandeVm.Panier}" Margin="5,0,5,8">
+                                <ItemsControl.Style>
+                                    <Style TargetType="ItemsControl">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CommandeVm.Panier.Count}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ItemsControl.Style>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#F0F7FF" CornerRadius="4" Padding="10,5" Margin="0,2">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="100"/>
+                                                    <ColumnDefinition Width="24"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding NomProduit}"
+                                       VerticalAlignment="Center" FontSize="12" Foreground="#0D2137"/>
+                                                <TextBlock Grid.Column="1"
+                                       Text="{Binding Quantite, StringFormat='Qté : {0}'}"
+                                       VerticalAlignment="Center" FontSize="12"
+                                       Foreground="#607D8B" HorizontalAlignment="Right"/>
+                                                <Button Grid.Column="2" Content="✕" Width="20" Height="20"
+                                    Background="Transparent" BorderThickness="0"
+                                    Foreground="#E53935" FontSize="10" Padding="0"
+                                    Command="{Binding DataContext.CommandeVm.RetirerDuPanierCommand,
+                                              RelativeSource={RelativeSource AncestorType=Page}}"
+                                    CommandParameter="{Binding}"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Séparateur + bouton créer -->
+                            <Border BorderBrush="#E8ECF0" BorderThickness="0,1,0,0" Margin="5,0,5,10"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0">
+                                <Button Content="✔ Créer la commande"
+                    Style="{StaticResource ActionButtonStyle}"
+                    Command="{Binding CommandeVm.AddCommand}"/>
+                            </StackPanel>
 
                             <!-- Message erreur -->
                             <TextBlock Text="{Binding CommandeVm.MErrorMessage}"
-                                       Foreground="Red" Margin="5,5,0,0">
+                   Foreground="Red" Margin="5,5,0,0">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>

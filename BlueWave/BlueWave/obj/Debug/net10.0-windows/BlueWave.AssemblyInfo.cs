@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlueWave")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+217d8b35e9f0eb8cbf8cbe114bfa0360b2250591")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+540aacd6d8ef5474312ec590dba4ffc008540933")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlueWave")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlueWave")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
