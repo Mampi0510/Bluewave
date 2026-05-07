@@ -1,8 +1,9 @@
+using BlueWave.Core.Interfaces;
+using BlueWave.Core.Models;
+using BlueWave.Data.Repositories;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
-using BlueWave.Core.Interfaces;
-using BlueWave.Core.Models;
 
 namespace BlueWave.ViewModels;
 
@@ -26,6 +27,72 @@ public partial class ApprovisionnementViewModel : ViewModelBase
     [ObservableProperty] private Produit? _selectedProduit;
     [ObservableProperty] private Stock? _selectedStock;
     [ObservableProperty] private Approvisionnement? _selectedApprovisionnement;
+    // Sidebar edit
+    [ObservableProperty] private bool _isEditing;
+    [ObservableProperty] private string? _editCertificat;
+    [ObservableProperty] private int _editQuantite;
+    private int _editingIdApp;
+    private int _ancienneQuantite; // pour calculer la diff stock
+
+    [RelayCommand]
+    private void Edit(Approvisionnement? appro)
+    {
+        if (appro == null) return;
+        _editingIdApp = appro.IdApp;
+        _ancienneQuantite = appro.Quantite;
+        EditCertificat = appro.Certificat;
+        EditQuantite = appro.Quantite;
+        IsEditing = true;
+        MErrorMessage = null;
+    }
+
+    [RelayCommand]
+    private void CancelEdit()
+    {
+        IsEditing = false;
+        _editingIdApp = 0;
+        EditCertificat = null;
+        EditQuantite = 0;
+    }
+
+    [RelayCommand]
+    private async Task SaveEdit()
+    {
+        if (string.IsNullOrWhiteSpace(EditCertificat)) { MErrorMessage = "Le certificat est obligatoire."; return; }
+        if (EditQuantite <= 0) { MErrorMessage = "La quantité doit être supérieure à 0."; return; }
+
+        try
+        {
+            var appro = Approvisionnements.FirstOrDefault(a => a.IdApp == _editingIdApp);
+            if (appro == null) return;
+
+            // Calculer la différence pour mettre à jour le stock
+            int diff = EditQuantite - _ancienneQuantite;
+
+            // Mettre à jour l'appro
+            appro.Certificat = EditCertificat;
+            appro.Quantite = EditQuantite;
+            await _repository.UpdateApprovisionnement(appro);
+
+            // Mettre à jour le stock
+            var stock = await _stockRepo.GetStockByNum(appro.NumeroStock);
+            if (stock != null)
+            {
+                stock.Quantite += diff; // diff positif = augmentation, négatif = diminution
+                if (stock.Quantite < 0) stock.Quantite = 0;
+                await _stockRepo.UpdateStock(stock);
+            }
+
+            IsEditing = false;
+            _editingIdApp = 0;
+            EditCertificat = null;
+            EditQuantite = 0;
+            MErrorMessage = null;
+
+            await LoadDataAsync();
+        }
+        catch (Exception ex) { MErrorMessage = $"Erreur : {ex.Message}"; }
+    }
 
     public ApprovisionnementViewModel(
         IApprovisionnementRepository repository,

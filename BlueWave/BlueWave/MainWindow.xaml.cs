@@ -16,6 +16,8 @@ namespace BlueWave
             InitializeComponent();
             _dashboard = new Dashboard();
             MainFrame.Navigate(_dashboard);
+            this.Icon = new System.Windows.Media.Imaging.BitmapImage(
+                new Uri("pack://application:,,,/Views/Assets/icon.png"));
         }
 
         private void Dashboard_click(object sender, RoutedEventArgs e)

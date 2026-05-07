@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlueWave.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+560d22b2ea0d4c62f5aa3e537e9ee07585f23f56")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b5df0ee44b4540a1be106ee85ee750eedbb63bcc")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlueWave.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlueWave.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

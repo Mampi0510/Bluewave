@@ -122,7 +122,7 @@
                         <DataGridTextColumn Header="ID" Binding="{Binding CodeProduit}" Width="60"/>
                         <DataGridTextColumn Header="Nom" Binding="{Binding NomProduit}" Width="*"/>
                         <DataGridTextColumn Header="Prix (Ar)" Binding="{Binding Prix}" Width="100"/>
-                        <DataGridTemplateColumn Header="Action" Width="180">
+                        <DataGridTemplateColumn Header="Action" Width="220">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

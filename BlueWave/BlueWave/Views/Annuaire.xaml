@@ -155,7 +155,7 @@
                                 <DataGridTextColumn Header="Nom" Binding="{Binding NomClient}" Width="*"/>
                                 <DataGridTextColumn Header="Prénom" Binding="{Binding PrenomClient}" Width="*"/>
                                 <DataGridTextColumn Header="Téléphone" Binding="{Binding Telephone}" Width="*"/>
-                                <DataGridTemplateColumn Header="Action" Width="180">
+                                <DataGridTemplateColumn Header="Action" Width="220">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
@@ -353,7 +353,7 @@
                                 <DataGridTextColumn Header="Nom" Binding="{Binding NomFournisseur}" Width="*"/>
                                 <DataGridTextColumn Header="Prénom" Binding="{Binding PrenomsFournisseur}" Width="*"/>
                                 <DataGridTextColumn Header="Téléphone" Binding="{Binding TelephoneFournisseur}" Width="*"/>
-                                <DataGridTemplateColumn Header="Action" Width="180">
+                                <DataGridTemplateColumn Header="Action" Width="220">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">

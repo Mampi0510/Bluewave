@@ -172,43 +172,108 @@
                         </StackPanel>
                     </Border>
 
-                    <DataGrid Grid.Row="1"
-                              Style="{StaticResource StyledDataGrid}"
-                              ItemsSource="{Binding ApproVm.Approvisionnements}"
-                              SelectedItem="{Binding ApproVm.SelectedApprovisionnement}">
-                        <DataGrid.ColumnHeaderStyle>
-                            <Style TargetType="DataGridColumnHeader"
-                                   BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
-                        </DataGrid.ColumnHeaderStyle>
-                        <DataGrid.CellStyle>
-                            <Style TargetType="DataGridCell"
-                                   BasedOn="{StaticResource StyledDataGridCell}"/>
-                        </DataGrid.CellStyle>
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow"
-                                   BasedOn="{StaticResource StyledDataGridRow}"/>
-                        </DataGrid.RowStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding IdApp}" Width="50"/>
-                            <DataGridTextColumn Header="Certificat" Binding="{Binding Certificat}" Width="*"/>
-                            <DataGridTextColumn Header="Fournisseur" Binding="{Binding Fournisseur.NomFournisseur}" Width="*"/>
-                            <DataGridTextColumn Header="Produit" Binding="{Binding Produit.NomProduit}" Width="*"/>
-                            <DataGridTextColumn Header="Stock" Binding="{Binding Stock.NomStock}" Width="*"/>
-                            <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}" Width="80"/>
-                            <DataGridTextColumn Header="Date" Binding="{Binding DateReception, StringFormat=dd/MM/yyyy}" Width="100"/>
-                            <DataGridTemplateColumn Header="Action" Width="120">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Content="Supprimer"
-                                                Style="{StaticResource DangerButtonStyle}"
-                                                Command="{Binding DataContext.ApproVm.DeleteCommand,
-                                                          RelativeSource={RelativeSource AncestorType=Page}}"
-                                                CommandParameter="{Binding}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <!-- DataGrid + Sidebar -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <DataGrid Grid.Column="0"
+                                  Style="{StaticResource StyledDataGrid}"
+                                  ItemsSource="{Binding ApproVm.Approvisionnements}"
+                                  SelectedItem="{Binding ApproVm.SelectedApprovisionnement}">
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader"
+                                       BasedOn="{StaticResource StyledDataGridColumnHeader}"/>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell"
+                                       BasedOn="{StaticResource StyledDataGridCell}"/>
+                            </DataGrid.CellStyle>
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow"
+                                       BasedOn="{StaticResource StyledDataGridRow}"/>
+                            </DataGrid.RowStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding IdApp}" Width="50"/>
+                                <DataGridTextColumn Header="Certificat" Binding="{Binding Certificat}" Width="100"/>
+                                <DataGridTextColumn Header="Fournisseur" Binding="{Binding Fournisseur.NomFournisseur}" Width="*"/>
+                                <DataGridTextColumn Header="Produit" Binding="{Binding Produit.NomProduit}" Width="*"/>
+                                <DataGridTextColumn Header="Stock" Binding="{Binding Stock.NomStock}" Width="*"/>
+                                <DataGridTextColumn Header="Quantité" Binding="{Binding Quantite}" Width="80"/>
+                                <DataGridTextColumn Header="Date" Binding="{Binding DateReception, StringFormat=dd/MM/yyyy}" Width="100"/>
+                                <DataGridTemplateColumn Header="Action" Width="200">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" Margin="3">
+                                                <Button Content="Modifier"
+                                                        Margin="0,0,5,0"
+                                                        Style="{StaticResource ActionButtonStyle}"
+                                                        Command="{Binding DataContext.ApproVm.EditCommand,
+                                                        RelativeSource={RelativeSource AncestorType=Page}}"
+                                                        CommandParameter="{Binding}"/>
+                                                <Button Content="Supprimer"
+                                                        Style="{StaticResource DangerButtonStyle}"
+                                                        Command="{Binding DataContext.ApproVm.DeleteCommand,
+                                                        RelativeSource={RelativeSource AncestorType=Page}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- SIDEBAR -->
+                        <Border Grid.Column="1" Width="280" Margin="15,0,0,0"
+                                Background="White" CornerRadius="12" Padding="20">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ApproVm.IsEditing}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="15" Opacity="0.08"
+                              ShadowDepth="2" Direction="270"/>
+                            </Border.Effect>
+
+                            <StackPanel>
+                                <Grid Margin="0,0,0,16">
+                                    <TextBlock Text="Modifier l'approvisionnement"
+                           FontSize="14" FontWeight="SemiBold"
+                           Foreground="#0D2137" VerticalAlignment="Center"/>
+                                    <Button HorizontalAlignment="Right" Content="✕"
+                        Width="24" Height="24"
+                        Background="Transparent" BorderThickness="0"
+                        Foreground="#9E9E9E" FontSize="12" Padding="0"
+                        Command="{Binding ApproVm.CancelEditCommand}"/>
+                                </Grid>
+
+                                <TextBlock Text="Certificat" FontSize="11"
+                       Foreground="#607D8B" Margin="0,0,0,4"/>
+                                <TextBox Height="35" VerticalContentAlignment="Center"
+                     Margin="0,0,0,12"
+                     Text="{Binding ApproVm.EditCertificat, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                <TextBlock Text="Quantité" FontSize="11"
+                       Foreground="#607D8B" Margin="0,0,0,4"/>
+                                <TextBox Height="35" VerticalContentAlignment="Center"
+                     Margin="0,0,0,20"
+                     Text="{Binding ApproVm.EditQuantite, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                <Button Content="✔ Enregistrer"
+                    Style="{StaticResource ActionButtonStyle}"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding ApproVm.SaveEditCommand}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
                 </Grid>
             </TabItem>
 
@@ -339,7 +404,7 @@
                                     </TextBlock>
                                 </Grid>
 
-                                <Button Grid.Column="2" Content="+ Produit" Margin="5"
+                                <Button Grid.Column="2" Content=" Produit" Margin="5"
                     Style="{StaticResource ActionButtonStyle}"
                     Command="{Binding CommandeVm.AddAuPanierCommand}"/>
                             </Grid>
@@ -386,7 +451,7 @@
                             <!-- Séparateur + bouton créer -->
                             <Border BorderBrush="#E8ECF0" BorderThickness="0,1,0,0" Margin="5,0,5,10"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0">
-                                <Button Content="✔ Créer la commande"
+                                <Button Content=" Créer la commande"
                     Style="{StaticResource ActionButtonStyle}"
                     Command="{Binding CommandeVm.AddCommand}"/>
                             </StackPanel>
