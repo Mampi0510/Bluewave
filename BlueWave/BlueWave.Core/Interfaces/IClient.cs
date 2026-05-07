@@ -13,7 +13,5 @@ namespace BlueWave.Core.Interfaces{
         Task UpdateClient(Client client);
 
         Task DeleteClient(Client client);
-
-        // Autre methode specifique 
     }
 }

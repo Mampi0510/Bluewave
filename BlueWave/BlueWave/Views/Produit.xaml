@@ -94,7 +94,7 @@
                 </StackPanel>
             </Border>
 
-            <!-- DataGrid + Sidebar -->
+            <!-- DataGrid et Sidebar -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

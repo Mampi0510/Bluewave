@@ -32,7 +32,7 @@ public partial class ApprovisionnementViewModel : ViewModelBase
     [ObservableProperty] private string? _editCertificat;
     [ObservableProperty] private int _editQuantite;
     private int _editingIdApp;
-    private int _ancienneQuantite; // pour calculer la diff stock
+    private int _ancienneQuantite; // calcul la diff stock
 
     [RelayCommand]
     private void Edit(Approvisionnement? appro)

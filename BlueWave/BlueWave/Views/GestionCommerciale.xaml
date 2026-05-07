@@ -290,7 +290,7 @@
                             <TextBlock Text="Nouvelle commande" Foreground="#607D8B"
                    FontSize="11" FontWeight="SemiBold" Margin="0,0,0,8"/>
 
-                            <!-- LIGNE 1 : Client / Destination / Délai -->
+                            <!-- LIGNE 1 : Client, Destination, Délai -->
                             <Grid Margin="0,0,0,8">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -358,7 +358,7 @@
                                 </Grid>
                             </Grid>
 
-                            <!-- LIGNE 2 : Produit / Quantité / Bouton ajouter au panier -->
+                            <!-- LIGNE 2 : Produit, Quantité, Bouton ajouter au panier -->
                             <Grid Margin="0,0,0,6">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition/>
@@ -448,31 +448,13 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
 
-                            <!-- Séparateur + bouton créer -->
+                            <!-- Séparateur et bouton créer -->
                             <Border BorderBrush="#E8ECF0" BorderThickness="0,1,0,0" Margin="5,0,5,10"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0">
                                 <Button Content=" Créer la commande"
                     Style="{StaticResource ActionButtonStyle}"
                     Command="{Binding CommandeVm.AddCommand}"/>
                             </StackPanel>
-
-                            <!-- Message erreur -->
-                            <TextBlock Text="{Binding CommandeVm.MErrorMessage}"
-                   Foreground="Red" Margin="5,5,0,0">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding CommandeVm.MErrorMessage}" Value="{x:Null}">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding CommandeVm.MErrorMessage}" Value="">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
                         </StackPanel>
                     </Border>
 
